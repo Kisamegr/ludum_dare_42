@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 61386700727833118}
   - component: {fileID: 50969980939889188}
   - component: {fileID: 114086377342373786}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Enemy Type1 Big
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   moveSpeed: 2
-  damageAmount: 5
+  meleeDamage: 1
   hp: 5
   shootInterval: 5
   bulletSpeed: 10

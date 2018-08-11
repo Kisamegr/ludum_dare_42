@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour {
 
   public EnemyType enemyType = EnemyType.Type1;
   public float moveSpeed = 5f;
-  public float damageAmount = 5f;
+  public int meleeDamage = 1;
   public int hp = 1;
   //Only if type 3
   public float shootInterval = 0.2f;
@@ -64,12 +64,12 @@ public class Enemy : MonoBehaviour {
       switch (enemyType)
       {
         case EnemyType.Type1:
-          player.GetDamage(damageAmount);
+          player.GetDamage(meleeDamage);
           Die();
           break;
         case EnemyType.Type2:
           //TODO use pushAmount variable?
-          player.GetPushed(damageAmount); 
+          player.GetPushed(meleeDamage); 
           break;
         default:
           break;
@@ -84,17 +84,15 @@ public class Enemy : MonoBehaviour {
     {
       GameObject bulletGO = Instantiate(bulletPrefab, position: bulletSpawnOffset.position, rotation: transform.rotation);
       Bullet bullet = bulletGO.GetComponent<Bullet>();
-      bullet.TargetTag = "Player";
-      bullet.damageAmount = damageAmount;
       bullet.Shoot(bulletSpeed);
 
       lastShootTime = Time.time;
     }
   }
 
-  public void GetDamage(float damageAmount) {
-    currentHp--;
-    if (currentHp == 0)
+  public void GetDamage(int damageAmount) {
+    currentHp -= damageAmount;
+    if (currentHp <= 0)
       Die();
   }
 

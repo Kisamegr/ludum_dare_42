@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4441890503556784}
   - component: {fileID: 212236562284231032}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,7 +35,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4561089193247084}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BulletSpawnOffset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   - component: {fileID: 61750917745261996}
   - component: {fileID: 50573333551871010}
   - component: {fileID: 114484091697156716}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Enemy Type2
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -160,7 +160,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 2
   moveSpeed: 0
-  damageAmount: 5
+  meleeDamage: 1
+  hp: 1
   shootInterval: 0.2
   bulletSpeed: 8
   bulletPrefab: {fileID: 1699185813431922, guid: 32b54711a44953f46bbcc5b90363997a,
