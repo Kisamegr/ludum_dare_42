@@ -9,12 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 408fa19e59883074db2aad6c904daef2, type: 3}
-  m_Name: Level 2
+  m_Name: Level 3
   m_EditorClassIdentifier: 
   id: 0
   enemySpawnEvents:
   - enemySpawns:
+    - enemy: {fileID: 1151960933072088, guid: ac8a4c057cafc3240b9ce2d1b7e30ecc, type: 2}
+      count: 3
+  - enemySpawns:
     - enemy: {fileID: 1871962711690566, guid: 93cb98d68ef1eb244b8407871a6d7526, type: 2}
-      count: 7
-    - enemy: {fileID: 1871962711690566, guid: 93cb98d68ef1eb244b8407871a6d7526, type: 2}
-      count: 1
+      count: 5
+    - enemy: {fileID: 1151960933072088, guid: ac8a4c057cafc3240b9ce2d1b7e30ecc, type: 2}
+      count: 5
