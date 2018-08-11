@@ -41,8 +41,8 @@ public class TopDownGame : MonoBehaviour {
     Vector3 screenWorldSize = ScreenWorldSize();
 
     for (int i = 0; i<mapBorders.Length; i++) {
-      float targetScaleX = 0.02f;
-      float targetScaleY = 0.02f;
+      float targetScaleX = 1f;
+      float targetScaleY = 1f;
       Vector3 targetPosition = Vector3.zero;
       Vector3 localScale = mapBorders[i].Transform.localScale;
 
@@ -63,14 +63,14 @@ public class TopDownGame : MonoBehaviour {
           }
         case MapBorder.WallType.Right: {
             float targetWidth = screenWorldSize.x/2 - mapBorders[i].BorderPosition;
-            targetPosition = new Vector3(mapBorders[i].BorderPosition + targetWidth, 0, 0);
+            targetPosition = new Vector3(mapBorders[i].BorderPosition + targetWidth/2, 0, 0);
             targetScaleX = targetWidth / mapBorders[i].Renderer.size.x;
             targetScaleY = screenWorldSize.y / mapBorders[i].Renderer.size.y;
             break;
           }
         case MapBorder.WallType.Bottom: {
             float targetHeight = screenWorldSize.y/2 - mapBorders[i].BorderPosition;
-            targetPosition = new Vector3(0, -mapBorders[i].BorderPosition - targetHeight, 0);
+            targetPosition = new Vector3(0, -mapBorders[i].BorderPosition - targetHeight/2, 0);
             targetScaleX = screenWorldSize.x / mapBorders[i].Renderer.size.x;
             targetScaleY = targetHeight / mapBorders[i].Renderer.size.y;
             break;
