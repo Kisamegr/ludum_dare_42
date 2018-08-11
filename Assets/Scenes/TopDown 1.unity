@@ -643,8 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countdown: 0
   maxCountdown: 0
-  horizontalWalls: []
-  verticalWalls: []
+  wallSpeed: 0.5
 --- !u!4 &1463579141
 Transform:
   m_ObjectHideFlags: 0
