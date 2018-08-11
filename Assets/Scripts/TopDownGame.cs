@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TopDownGame : MonoBehaviour {
 
+  public float initialDelay = 3;
   public bool wallsClosing = true;
   public Vector2 mapSize = new Vector2(20, 20);
   public float wallThickness = 10;
@@ -12,19 +13,42 @@ public class TopDownGame : MonoBehaviour {
   public float wallSpeed = 0.5f;
   public float wallLerpSpeed = 1;
 
+  public LevelObject[] levels;
+
   private MapBorder[] mapBorders;  // Left, Top, Right, Bottom
 
   private Camera mainCamera;
   private Transform player;
 
+  private int currentLevel = 0;
+
+  private Queue<EnemySpawnEvent> remainingSpawnEvents;
+  private int remainingEnemies = 0;
+
   public enum WallType {
     Left, Top, Right, Bottom
   }
 
+  private static TopDownGame _instance;
+
+  public int CurrentLevel {
+    get {
+      return currentLevel;
+    }
+  }
+
+  public static TopDownGame Instance() {
+    return _instance;
+  }
+
+  private void Awake() {
+    _instance = this;
+  }
   // Use this for initialization
   void Start() {
     mainCamera = Camera.main;
     player = GameObject.FindGameObjectWithTag("Player").transform;
+    remainingSpawnEvents = new Queue<EnemySpawnEvent>();
 
     countdown = 100;
     maxCountdown = 100;
@@ -48,13 +72,21 @@ public class TopDownGame : MonoBehaviour {
 
   // Update is called once per frame
   void Update() {
-    if (wallsClosing)
+    if (Time.timeSinceLevelLoad > initialDelay && wallsClosing)
       ChangeWallBorders(true, -Time.deltaTime * wallSpeed);
 
     if (Input.GetMouseButton(1))
       ChangeWallBorders(true, 10);
 
     SetWallPositionsAndScale();
+
+
+    if (Time.timeSinceLevelLoad > initialDelay && remainingEnemies == 0) {
+      if (remainingSpawnEvents.Count == 0)
+        LoadNextLevel();
+      else
+        NextSpawn();
+    }
   }
 
   public void ChangeWallBorders(bool facingPlayer, float amount) {
@@ -83,8 +115,6 @@ public class TopDownGame : MonoBehaviour {
     }
   }
 
-
-
   private MapBorder ClosestBorder() {
     MapBorder closest = mapBorders[0];
     float minDistance = int.MaxValue;
@@ -98,7 +128,6 @@ public class TopDownGame : MonoBehaviour {
 
     return closest;
   }
-
 
   void SetWallPositionsAndScale() {
 
@@ -142,21 +171,55 @@ public class TopDownGame : MonoBehaviour {
       Vector3 targetLocalScale = new Vector3(targetScaleX, targetScaleY, localScale.z);
 
       mapBorders[i].Transform.localScale = Vector3.Lerp(
-        localScale, 
-        targetLocalScale, 
+        localScale,
+        targetLocalScale,
         Time.deltaTime);
 
       mapBorders[i].Transform.position = Vector3.Lerp(
-        mapBorders[i].Transform.position, 
-        targetPosition, 
+        mapBorders[i].Transform.position,
+        targetPosition,
         Time.deltaTime * wallLerpSpeed);
     }
   }
 
+  void LoadNextLevel() {
+    remainingSpawnEvents.Clear();
+
+    if (CurrentLevel < levels.Length) {
+      LevelObject level = levels[CurrentLevel];
+      foreach (EnemySpawnEvent spawnEvent in level.enemySpawnEvents)
+        remainingSpawnEvents.Enqueue(spawnEvent);
+
+      currentLevel++;
+    }
+  }
+
+  void NextSpawn() {
+    EnemySpawnEvent spawnEvent = remainingSpawnEvents.Dequeue();
+
+    Rect mapSize = MapSize();
+
+    foreach (EnemySpawn spawn in spawnEvent.enemySpawns) {
+      for (int i = 0; i<spawn.count; i++) {
+        Vector3 position = new Vector3(
+          Random.Range(mapSize.xMin, mapSize.xMax),
+          Random.Range(mapSize.yMin, mapSize.yMax),
+          0);
+
+        GameObject enemyObj = Instantiate(spawn.enemy, position, Quaternion.identity);
+        remainingEnemies++;
+      }
+    }
+  }
+
+  public void EnemyDied() {
+    remainingEnemies--;
+  }
+
   public Rect MapSize() {
     return new Rect(
-      mapBorders[(int) WallType.Left].BorderPosition - mapBorders[(int) WallType.Right].BorderPosition,
-      mapBorders[(int) WallType.Top].BorderPosition - mapBorders[(int) WallType.Bottom].BorderPosition,
+      -mapBorders[(int) WallType.Left].BorderPosition,
+      -mapBorders[(int) WallType.Bottom].BorderPosition,
       mapBorders[(int) WallType.Left].BorderPosition + mapBorders[(int) WallType.Right].BorderPosition,
       mapBorders[(int) WallType.Top].BorderPosition + mapBorders[(int) WallType.Bottom].BorderPosition
       );

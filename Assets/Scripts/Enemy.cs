@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour {
   public EnemyType enemyType = EnemyType.Type1;
   public float moveSpeed = 5f;
   public float damageAmount = 5f;
+  public int hp = 1;
   //Only if type 3
   public float shootInterval = 0.2f;
   public float bulletSpeed = 10f;
@@ -25,6 +26,7 @@ public class Enemy : MonoBehaviour {
   private TopDownCharacterController player;
   private Rigidbody2D _rigidbody;
   private float lastShootTime;
+  private int currentHp;
 
   // Use this for initialization
   void Start() {
@@ -32,6 +34,7 @@ public class Enemy : MonoBehaviour {
     _rigidbody = GetComponent<Rigidbody2D>();
     lastShootTime = Time.time;
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
+    currentHp = hp;
   }
 
   // Update is called once per frame
@@ -90,10 +93,13 @@ public class Enemy : MonoBehaviour {
   }
 
   public void GetDamage(float damageAmount) {
-    Die();
+    currentHp--;
+    if (currentHp == 0)
+      Die();
   }
 
   public void Die() {
+    TopDownGame.Instance().EnemyDied();
     Destroy(gameObject);
   }
 
