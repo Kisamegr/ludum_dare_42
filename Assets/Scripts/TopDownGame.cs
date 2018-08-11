@@ -1,26 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TopDownGame : MonoBehaviour {
 
-  public float initialDelay = 3;
+  public float countdownTimer = 3;
   public bool wallsClosing = true;
   public Vector2 mapSize = new Vector2(20, 20);
-  public float wallThickness = 10;
-  public float countdown;
-  public float maxCountdown;
+  public float wallThickness = 10; 
   public float wallSpeed = 0.5f;
   public float wallLerpSpeed = 1;
 
   public LevelObject[] levels;
+  private bool isGameover;
+  private int score;
 
+
+  private Transform wallParent;
   private MapBorder[] mapBorders;  // Left, Top, Right, Bottom
 
   private Camera mainCamera;
   private Transform player;
 
   private int currentLevel = 0;
+  private float lastLevelLoadTime;
 
   private Queue<EnemySpawnEvent> remainingSpawnEvents;
   private int remainingEnemies = 0;
@@ -28,6 +32,8 @@ public class TopDownGame : MonoBehaviour {
   public enum WallType {
     Left, Top, Right, Bottom
   }
+
+  private UiManager ui_manager;
 
   private static TopDownGame _instance;
 
@@ -49,69 +55,120 @@ public class TopDownGame : MonoBehaviour {
     mainCamera = Camera.main;
     player = GameObject.FindGameObjectWithTag("Player").transform;
     remainingSpawnEvents = new Queue<EnemySpawnEvent>();
-
-    countdown = 100;
-    maxCountdown = 100;
-
-    Vector2 screenWorldSize = ScreenWorldSize();
-    Transform wallParent = GameObject.Find("Walls").transform;
-
-    mapBorders = new MapBorder[4];
-    mapBorders[0] = new MapBorder(wallParent.Find("Left"), WallType.Left, mapSize.x / 2);
-    mapBorders[1] = new MapBorder(wallParent.Find("Top"), WallType.Top, mapSize.y / 2);
-    mapBorders[2] = new MapBorder(wallParent.Find("Right"), WallType.Right, mapSize.x / 2);
-    mapBorders[3] = new MapBorder(wallParent.Find("Bottom"), WallType.Bottom, mapSize.y / 2);
-
+ 
+    wallParent = GameObject.Find("Walls").transform;
 
     wallParent.GetComponent<PolygonCollider2D>().points = new Vector2[] {
       new Vector2(-mapSize.x / 2, -mapSize.y / 2),
       new Vector2(-mapSize.x / 2, mapSize.y / 2),
       new Vector2(mapSize.x / 2, mapSize.y / 2),
       new Vector2(mapSize.x / 2, -mapSize.y / 2) };
+
+    LoadNextLevel();
+
+    isGameover = false;
+    score = 0;
+    ui_manager = UiManager.Instance();
   }
 
   // Update is called once per frame
   void Update() {
-    if (Time.timeSinceLevelLoad > initialDelay && wallsClosing)
-      ChangeWallBorders(true, -Time.deltaTime * wallSpeed);
 
-    if (Input.GetMouseButton(1))
-      ChangeWallBorders(true, 10);
+    if (isGameover)
+      if (Input.anyKeyDown)
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+      
+    if (!isGameover)
+    {
+      if ((Time.time - lastLevelLoadTime) > countdownTimer && wallsClosing)
+      {
+        ChangeWallBorders(false, -Time.deltaTime * wallSpeed);
+      }
 
-    SetWallPositionsAndScale();
+      SetWallPositionsAndScale();
 
-
-    if (Time.timeSinceLevelLoad > initialDelay && remainingEnemies == 0) {
-      if (remainingSpawnEvents.Count == 0)
-        LoadNextLevel();
-      else
-        NextSpawn();
+      if ((Time.time - lastLevelLoadTime) > countdownTimer && remainingEnemies == 0)
+      {
+        if (remainingSpawnEvents.Count == 0)
+          LoadNextLevel();
+        else
+          NextSpawn();
+      }
     }
+
+    Rect currentMapSize = CurrentMapSize();
+    if(currentMapSize.width < 0 || currentMapSize.height < 0)
+    {
+      GameOver();
+    }
+  }
+
+  public void GameOver()
+  {
+    isGameover = true;
+    ui_manager.GameOver();
+  }
+
+  public void IncreaseScore(int increaseAmount)
+  {
+    score += increaseAmount;
   }
 
   public void ChangeWallBorders(bool facingPlayer, float amount) {
     float angle = player.rotation.eulerAngles.z;
-    if (!facingPlayer) {
-      angle -= 180;
-      if (angle < 0)
-        angle += 360;
-    }
+    //if (!facingPlayer) {
+    //  angle -= 180;
+    //  if (angle < 0)
+    //    angle += 360;
+    //}
 
-    if (angle >= 0 && angle < 90) {
-      mapBorders[(int) WallType.Top].BorderPosition += amount;
-      mapBorders[(int) WallType.Right].BorderPosition += amount;
+    //if (angle >= 0 && angle < 90) {
+    //  mapBorders[(int) WallType.Top].BorderPosition += amount;
+    //  mapBorders[(int) WallType.Right].BorderPosition += amount;
+    //}
+    //else if (angle < 180) {
+    //  mapBorders[(int) WallType.Top].BorderPosition += amount;
+    //  mapBorders[(int) WallType.Left].BorderPosition += amount;
+    //}
+    //else if (angle < 270) {
+    //  mapBorders[(int) WallType.Left].BorderPosition += amount;
+    //  mapBorders[(int) WallType.Bottom].BorderPosition += amount;
+    //}
+    //else if (angle < 360) {
+    //  mapBorders[(int) WallType.Bottom].BorderPosition += amount;
+    //  mapBorders[(int) WallType.Right].BorderPosition += amount;
+    //}
+
+    if (!facingPlayer)
+    {
+      angle += 180;
     }
-    else if (angle < 180) {
-      mapBorders[(int) WallType.Top].BorderPosition += amount;
-      mapBorders[(int) WallType.Left].BorderPosition += amount;
-    }
-    else if (angle < 270) {
-      mapBorders[(int) WallType.Left].BorderPosition += amount;
-      mapBorders[(int) WallType.Bottom].BorderPosition += amount;
-    }
-    else if (angle < 360) {
-      mapBorders[(int) WallType.Bottom].BorderPosition += amount;
-      mapBorders[(int) WallType.Right].BorderPosition += amount;
+    Debug.Log(angle);
+    angle *= Mathf.Deg2Rad;
+    Vector2 playerDir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+    Debug.Log(LayerMask.NameToLayer("Wall"));
+    var layermask = 1 << LayerMask.NameToLayer("Wall");
+    Debug.Log(layermask);
+    RaycastHit2D hit = Physics2D.Raycast(player.transform.position, playerDir,Mathf.Infinity, layermask);
+    if(hit.collider != null)
+    {
+      switch (hit.collider.name)
+      {
+        case "Left":
+          mapBorders[(int)WallType.Left].BorderPosition += amount;
+          break;
+        case "Right":
+          mapBorders[(int)WallType.Right].BorderPosition += amount;
+          break;
+        case "Top":
+          mapBorders[(int)WallType.Top].BorderPosition += amount;
+          break;
+        case "Bottom":
+          mapBorders[(int)WallType.Bottom].BorderPosition += amount;
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -183,6 +240,14 @@ public class TopDownGame : MonoBehaviour {
   }
 
   void LoadNextLevel() {
+    mapBorders = new MapBorder[4];
+    mapBorders[0] = new MapBorder(wallParent.Find("Left"), WallType.Left, mapSize.x / 2);
+    mapBorders[1] = new MapBorder(wallParent.Find("Top"), WallType.Top, mapSize.y / 2);
+    mapBorders[2] = new MapBorder(wallParent.Find("Right"), WallType.Right, mapSize.x / 2);
+    mapBorders[3] = new MapBorder(wallParent.Find("Bottom"), WallType.Bottom, mapSize.y / 2);
+
+    lastLevelLoadTime = Time.time;
+
     remainingSpawnEvents.Clear();
 
     if (CurrentLevel < levels.Length) {
@@ -197,7 +262,7 @@ public class TopDownGame : MonoBehaviour {
   void NextSpawn() {
     EnemySpawnEvent spawnEvent = remainingSpawnEvents.Dequeue();
 
-    Rect mapSize = MapSize();
+    Rect mapSize = CurrentMapSize();
 
     foreach (EnemySpawn spawn in spawnEvent.enemySpawns) {
       for (int i = 0; i<spawn.count; i++) {
@@ -216,7 +281,7 @@ public class TopDownGame : MonoBehaviour {
     remainingEnemies--;
   }
 
-  public Rect MapSize() {
+  public Rect CurrentMapSize() {
     return new Rect(
       -mapBorders[(int) WallType.Left].BorderPosition,
       -mapBorders[(int) WallType.Bottom].BorderPosition,
@@ -224,14 +289,7 @@ public class TopDownGame : MonoBehaviour {
       mapBorders[(int) WallType.Top].BorderPosition + mapBorders[(int) WallType.Bottom].BorderPosition
       );
   }
-
-  private Vector2 ScreenWorldSize() {
-    Vector2 size;
-    size.y = Camera.main.orthographicSize * 2.0f;
-    size.x = size.y * Camera.main.aspect;
-    return size;
-  }
-
+ 
   struct MapBorder {
     public Transform Transform { get; private set; }
     public SpriteRenderer Renderer { get; private set; }

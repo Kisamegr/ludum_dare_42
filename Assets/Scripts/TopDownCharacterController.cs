@@ -15,11 +15,14 @@ public class TopDownCharacterController : MonoBehaviour {
 
   Rigidbody2D body;
 
+  private TopDownGame _GAME;
+
   // Use this for initialization
   void Start() {
     body = GetComponent<Rigidbody2D>();
     lastShootTime = Time.time;
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
+    _GAME = TopDownGame.Instance();
   }
 
   // Update is called once per frame
@@ -58,7 +61,7 @@ public class TopDownCharacterController : MonoBehaviour {
 
   public void GetDamage(float damageAmount)
   {
-
+    _GAME.ChangeWallBorders(false, -damageAmount);
   }
 
   public void GetPushed(float force)

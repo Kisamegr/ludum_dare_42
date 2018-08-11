@@ -100,6 +100,7 @@ public class Enemy : MonoBehaviour {
 
   public void Die() {
     TopDownGame.Instance().EnemyDied();
+    TopDownGame.Instance().ChangeWallBorders(true, 5);
     Destroy(gameObject);
   }
 
