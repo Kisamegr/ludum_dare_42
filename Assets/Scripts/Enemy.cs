@@ -7,48 +7,38 @@ public enum EnemyType { Type1 };
 
 public class Enemy : MonoBehaviour {
 
-    public EnemyType enemyType = EnemyType.Type1;
+  public EnemyType enemyType = EnemyType.Type1;
+  public float moveSpeed = 5f;
 
-    public float moveSpeed = 5f;
+  private TopDownCharacterController player;
+  private Rigidbody2D _rigidbody;
 
-    private TopDownCharacterController player;
+  // Use this for initialization
+  void Start() {
+    player = GameObject.Find("Player").GetComponent<TopDownCharacterController>();
+    _rigidbody = GetComponent<Rigidbody2D>();
+  }
 
-    private Rigidbody2D _rigidbody;
+  // Update is called once per frame
+  void Update() {
+    Vector2 moveDir = (player.transform.position - transform.position).normalized;
+    _rigidbody.velocity = moveDir * moveSpeed;
+  }
 
-	// Use this for initialization
-	void Start () {
-        player = GameObject.Find("Player").GetComponent<TopDownCharacterController>();
-        _rigidbody = GetComponent<Rigidbody2D>();
+  public void OnCollisionEnter2D(Collision2D collision) {
+    if (collision.collider.CompareTag(player.tag)) {
+      player.GetDamage(this);
+      Die();
     }
-	
-	// Update is called once per frame
-	void Update () {
+  }
 
+  public void GetDamage(Bullet bullet) {
+    Die();
+  }
 
-        Vector2 moveDir = (player.transform.position - transform.position).normalized;
-
-        _rigidbody.velocity = moveDir * moveSpeed;
-
-	}
-
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag(player.tag))
-        {
-            player.GetDamage(this);
-            Die();
-        }
-    }
-
-    public void GetDamage(Bullet bullet)
-    {
-        Die();
-    }
-
-    public void Die()
-    {
-        Destroy(gameObject);
-    }
+  public void Die() {
+    Destroy(gameObject);
+  }
 
 
 }
