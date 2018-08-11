@@ -44,14 +44,26 @@ public class TopDownCharacterController : MonoBehaviour {
 
   void Shoot() {
     if (Input.GetAxis("Fire1") > 0 && Time.time - lastShootTime > shootInterval) {
-      GameObject bullet = Instantiate(bulletPrefab, position: bulletSpawnOffset.position, rotation: transform.rotation);
-      bullet.GetComponent<Bullet>().Shoot(bulletSpeed);
+      float damageAmount = 5f; //TODO: make it a class variable
+      GameObject bulletGO = Instantiate(bulletPrefab, position: bulletSpawnOffset.position, rotation: transform.rotation);
+      Bullet bullet = bulletGO.GetComponent<Bullet>();
+      bullet.TargetTag = "Enemy";
+      bullet.damageAmount = damageAmount;
+      bullet.Shoot(bulletSpeed);
+
       lastShootTime = Time.time;
     }
   }
+  
 
-  public void GetDamage(Enemy enemy) {
-    //Decrease screen size
+  public void GetDamage(float damageAmount)
+  {
+
+  }
+
+  public void GetPushed(float force)
+  {
+
   }
 
 

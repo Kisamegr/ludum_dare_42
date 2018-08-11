@@ -8,16 +8,9 @@ public enum BulletType { Simple };
 public class Bullet : MonoBehaviour {
 
   public BulletType bulletType = BulletType.Simple;
-
-  // Use this for initialization
-  void Start() {
-
-  }
-
-  // Update is called once per frame
-  void Update() {
-
-  }
+  public float damageAmount;
+  public float pushForce;
+  public string TargetTag { get; set; }
 
   public void Shoot(float bulletSpeed) {
     float bulletAngle = Mathf.Deg2Rad * transform.rotation.eulerAngles.z;
@@ -26,8 +19,16 @@ public class Bullet : MonoBehaviour {
   }
 
   private void OnTriggerEnter2D(Collider2D collision) {
-    if (collision.tag == "Enemy") {
-      collision.GetComponent<Enemy>().GetDamage(this);
+    //if simple type1
+
+    Debug.Log(TargetTag);
+    if (collision.CompareTag(TargetTag)) {
+      collision.gameObject.SendMessage("GetDamage", damageAmount);
+      Destroy(gameObject);
+    }
+    else if (collision.CompareTag("Wall"))
+    {
+      Destroy(gameObject);
     }
   }
 

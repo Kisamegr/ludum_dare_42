@@ -2,43 +2,101 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyType { Type1 };
+
+/// <summary>
+/// Type1: Deal damage and Die on collision
+/// Type2: Push on collision
+/// Type3: Turret
+/// </summary>
+public enum EnemyType { Type1, Type2, Type3 };
 
 
 public class Enemy : MonoBehaviour {
 
   public EnemyType enemyType = EnemyType.Type1;
   public float moveSpeed = 5f;
+  public float damageAmount = 5f;
+  //Only if type 3
+  public float shootInterval = 0.2f;
+  public float bulletSpeed = 10f;
+  public GameObject bulletPrefab;
+  public Transform bulletSpawnOffset;
 
   private TopDownCharacterController player;
   private Rigidbody2D _rigidbody;
+  private float lastShootTime;
 
   // Use this for initialization
   void Start() {
     player = GameObject.Find("Player").GetComponent<TopDownCharacterController>();
     _rigidbody = GetComponent<Rigidbody2D>();
+    lastShootTime = Time.time;
+    bulletSpawnOffset = transform.Find("BulletSpawnOffset");
   }
 
   // Update is called once per frame
   void Update() {
+
     Vector2 moveDir = (player.transform.position - transform.position).normalized;
-    _rigidbody.velocity = moveDir * moveSpeed;
+
+    switch (enemyType)
+    {
+      case EnemyType.Type1:
+        _rigidbody.velocity = moveDir * moveSpeed;
+        break;
+      case EnemyType.Type2:
+        _rigidbody.velocity = moveDir * moveSpeed; 
+        break;
+      case EnemyType.Type3:
+        //Extrapolate maybe to predict future movement (+ noise)
+        transform.rotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, moveDir));
+        Shoot();
+        break;
+    }
+    
   }
 
   public void OnCollisionEnter2D(Collision2D collision) {
     if (collision.collider.CompareTag(player.tag)) {
-      player.GetDamage(this);
-      Die();
+      switch (enemyType)
+      {
+        case EnemyType.Type1:
+          player.GetDamage(damageAmount);
+          Die();
+          break;
+        case EnemyType.Type2:
+          //TODO use pushAmount variable?
+          player.GetPushed(damageAmount); 
+          break;
+        default:
+          break;
+      }
     }
   }
 
-  public void GetDamage(Bullet bullet) {
+
+  public void Shoot()
+  {
+    if (Time.time - lastShootTime > shootInterval)
+    {
+      GameObject bulletGO = Instantiate(bulletPrefab, position: bulletSpawnOffset.position, rotation: transform.rotation);
+      Bullet bullet = bulletGO.GetComponent<Bullet>();
+      bullet.TargetTag = "Player";
+      bullet.damageAmount = damageAmount;
+      bullet.Shoot(bulletSpeed);
+
+      lastShootTime = Time.time;
+    }
+  }
+
+  public void GetDamage(float damageAmount) {
     Die();
   }
 
   public void Die() {
     Destroy(gameObject);
   }
+
 
 
 }
