@@ -36,30 +36,55 @@ public class TopDownGame : MonoBehaviour {
   }
 
   // Update is called once per frame
-  void Update() {    
-    MapBorder closestBorder = ClosestBorder();
-    int oppositeIndex = ((int) closestBorder.Type + 2) % 4;
-    mapBorders[oppositeIndex].BorderPosition -= Time.deltaTime * wallSpeed;
-
-    CalculateWalls();
+  void Update() {
+    ChangeWallBorders(true, Time.deltaTime * wallSpeed);
+    SetWallPositionsAndScale();
   }
+
+  public void ChangeWallBorders(bool facingPlayer, float amount) {
+    float angle = player.rotation.eulerAngles.z;
+    if (!facingPlayer) {
+      angle -= 180;
+      if (angle < 0)
+        angle += 360;
+    }
+
+    if (angle >= 0 && angle < 90) {
+      mapBorders[(int) WallType.Top].BorderPosition -= amount;
+      mapBorders[(int) WallType.Right].BorderPosition -= amount;
+    }
+    else if (angle < 180) {
+      mapBorders[(int) WallType.Top].BorderPosition -= amount;
+      mapBorders[(int) WallType.Left].BorderPosition -= amount;
+    }
+    else if (angle < 270) {
+      mapBorders[(int) WallType.Left].BorderPosition -= amount;
+      mapBorders[(int) WallType.Bottom].BorderPosition -= amount;
+    }
+    else if (angle < 360) {
+      mapBorders[(int) WallType.Bottom].BorderPosition -= amount;
+      mapBorders[(int) WallType.Right].BorderPosition -= amount;
+    }
+  }
+
+
 
   private MapBorder ClosestBorder() {
     MapBorder closest = mapBorders[0];
     float minDistance = int.MaxValue;
-    foreach(MapBorder border in mapBorders) {
+    foreach (MapBorder border in mapBorders) {
       float distance = Vector3.Distance(border.Transform.position, player.position);
       if (distance < minDistance) {
         minDistance = distance;
         closest = border;
       }
-    } 
+    }
 
     return closest;
   }
 
 
-  void CalculateWalls() {
+  void SetWallPositionsAndScale() {
     Vector3 screenWorldSize = ScreenWorldSize();
 
     for (int i = 0; i<mapBorders.Length; i++) {
