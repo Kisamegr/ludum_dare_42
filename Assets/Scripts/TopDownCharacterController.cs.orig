@@ -20,12 +20,12 @@ public class TopDownCharacterController : MonoBehaviour {
 
   Rigidbody2D body;
 
+<<<<<<< .merge_file_a12240
   private float rootDuration = 0;
   private float rootStartTime = 0;
 
   private float invunerableDuration = 0;
   private float invunerableStartTime = 0;
-  private TopDownGame _GAME;
 
   private int currentAmmo = 100;
 
@@ -35,6 +35,10 @@ public class TopDownCharacterController : MonoBehaviour {
     Rooted = 1,
     Invunerable = 2
   }
+=======
+  private TopDownGame _GAME;
+
+>>>>>>> .merge_file_a10992
   // Use this for initialization
   void Start() {
     body = GetComponent<Rigidbody2D>();
@@ -109,11 +113,17 @@ public class TopDownCharacterController : MonoBehaviour {
     }
   }
 
+<<<<<<< .merge_file_a12240
 
   public void GetDamage(int damageAmount) {
     if (!HasStatus(Status.Invunerable)) {
-      _GAME.ChangeWallBorders(false, -damageAmount);
+
     }
+=======
+  public void GetDamage(float damageAmount)
+  {
+    _GAME.ChangeWallBorders(false, -damageAmount);
+>>>>>>> .merge_file_a10992
   }
 
 
@@ -146,6 +156,7 @@ public class TopDownCharacterController : MonoBehaviour {
     invunerableStartTime = 0;
     currentStatus = Status.None;
   }
+
   public bool HasStatus(Status status) {
     return (currentStatus & status) == status;
   }
