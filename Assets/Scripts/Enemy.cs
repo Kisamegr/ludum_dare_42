@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour {
   public float bulletSpeed = 10f;
   public GameObject bulletPrefab;
   public Transform bulletSpawnOffset;
+  public Transform scorePickupPrefab;
 
   private TopDownCharacterController player;
   private Rigidbody2D _rigidbody;
@@ -100,6 +101,8 @@ public class Enemy : MonoBehaviour {
     TopDownGame.Instance().EnemyDied();
     TopDownGame.Instance().ChangeWallBorders(true, 5);
     Destroy(gameObject);
+    Instantiate(scorePickupPrefab, transform.position, Quaternion.identity);
+
   }
 
 

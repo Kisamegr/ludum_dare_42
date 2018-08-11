@@ -29,8 +29,10 @@ public class Bullet : MonoBehaviour {
     if (collision.CompareTag(targetTag)) {
       HitTarget(collision.gameObject);
     }
-    Debug.Log("DESTROEES");
-    Destroy(gameObject);
+
+    if (collision.CompareTag("Wall")) { 
+      Destroy(gameObject);
+    }
   }
 
 }

@@ -36,10 +36,11 @@ public class ScorePickup : MonoBehaviour {
   }
 
   void OnTriggerEnter2D(Collider2D collision)
-  {
+  { 
     if (collision.gameObject.CompareTag("Player"))
     {
       TopDownGame.Instance().IncreaseScore(score);
+      Disappear();
     }
   }
 

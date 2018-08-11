@@ -112,6 +112,7 @@ public class TopDownGame : MonoBehaviour {
   public void IncreaseScore(int increaseAmount)
   {
     score += increaseAmount;
+    ui_manager.UpdateScore(score);
   }
 
   public void ChangeWallBorders(bool facingPlayer, float amount) {
