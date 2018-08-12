@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum BulletType { Simple };
 
-
+[RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : MonoBehaviour {
 
   public BulletType bulletType = BulletType.Simple;
@@ -14,6 +14,11 @@ public class Bullet : MonoBehaviour {
   public string targetTag;
   public Color explosionColor;
 
+  protected Rigidbody2D body;
+
+  protected virtual void Awake() {
+    body = GetComponent<Rigidbody2D>();
+  }
 
   public void Shoot() {
     Shoot(bulletSpeed);
@@ -22,7 +27,7 @@ public class Bullet : MonoBehaviour {
   public void Shoot(float bulletSpeed) {
     float bulletAngle = Mathf.Deg2Rad * transform.rotation.eulerAngles.z;
     Vector2 bulletDir = new Vector2(Mathf.Cos(bulletAngle), Mathf.Sin(bulletAngle));
-    GetComponent<Rigidbody2D>().velocity = bulletDir * bulletSpeed;
+    body.velocity = bulletDir * bulletSpeed;
   }
 
   public virtual void HitTarget(GameObject target) {

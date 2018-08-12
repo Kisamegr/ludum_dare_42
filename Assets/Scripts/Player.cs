@@ -147,6 +147,8 @@ void Update() {
               currentSpecialBullet = rocket;
               break;
             case SpecialWeaponObject.WeaponType.Homing:
+              HomingMissle missle = (HomingMissle) CreateBullet(specialWeapon.bullet);
+              missle.Shoot();
               break;
           }
 
