@@ -6,7 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour {
    
-  public float speedDamping = 0.12f;
+  public float invunerableDamage = 5f;
+  public float dashSpeed = 10;
+  public float dashTime = 0.5f;
+  public float dashDamping = 0.12f;
   public GameObject primaryBulletPrefab; 
   public Status currentStatus;
   public PlayerLevelsObject playerLevels;
@@ -29,8 +32,11 @@ public class Player : MonoBehaviour {
 
   Rigidbody2D body;
 
-  private float rootDuration = 0;
-  private float rootStartTime = 0;
+  private float dashDuration = 0;
+  private float dashStartTime = 0;
+
+  private float afterDashDuration = 0;
+  private float afterDashStartTime = 0;
 
   private float invunerableDuration = 0;
   private float invunerableStartTime = 0;
@@ -41,11 +47,14 @@ public class Player : MonoBehaviour {
   private Bullet currentSpecialBullet = null;
   private SpecialWeaponObject specialWeapon;
 
+  private Vector2 dashDirection;
+
   [Flags]
   public enum Status {
     None = 0,
-    Rooted = 1,
-    Invunerable = 2
+    Dashing = 1,
+    AfterDashing = 2,
+    Invunerable = 4
   }
   // Use this for initialization
   void Start() {
@@ -62,8 +71,7 @@ public class Player : MonoBehaviour {
 
 // Update is called once per frame
 void Update() {
-    if (!HasStatus(Status.Rooted))
-      Move();
+    Move();
     Rotate();
     PrimaryShoot();
     SpecialShoot();
@@ -76,7 +84,15 @@ void Update() {
     velocity.x = Input.GetAxis("Horizontal") * maxSpeed;
     velocity.y = Input.GetAxis("Vertical") * maxSpeed;
 
-    body.velocity = Vector2.Lerp(body.velocity, velocity, Time.deltaTime / speedDamping);
+    Debug.Log(currentStatus);
+    if(HasStatus(Status.Dashing)) {
+      body.velocity = dashDirection * dashSpeed;
+    }
+    else if (HasStatus(Status.AfterDashing)) {
+      body.velocity = Vector2.Lerp(body.velocity, velocity, Time.deltaTime / dashDamping);
+    }
+    else
+      body.velocity = velocity;
   }
 
   void Rotate() {
@@ -137,8 +153,8 @@ void Update() {
         if (lastSpecialShootTime + specialWeapon.cooldown < Time.time) {
           switch (specialWeapon.type) {
             case SpecialWeaponObject.WeaponType.Dash:
-              SetStatus(Status.Rooted | Status.Invunerable, 1);
-              body.AddForce(transform.right * 75, ForceMode2D.Impulse);
+              SetStatus(Status.Dashing | Status.Invunerable, dashTime);
+              dashDirection = transform.right;
               break;
             case SpecialWeaponObject.WeaponType.Rocket:
               RocketBullet rocket = (RocketBullet) CreateBullet(specialWeapon.bullet);
@@ -146,8 +162,14 @@ void Update() {
               currentSpecialBullet = rocket;
               break;
             case SpecialWeaponObject.WeaponType.Homing:
-              HomingMissle missle = (HomingMissle) CreateBullet(specialWeapon.bullet);
-              missle.Shoot();
+              float maxAngle = 45;
+              float angleSpacing = maxAngle / specialWeapon.count;
+              float currentAngle = -maxAngle/2;
+              for(int i=0; i<specialWeapon.count; i++) {
+                HomingMissle missle = (HomingMissle) CreateBullet(specialWeapon.bullet);
+                missle.ShootOffset(currentAngle);
+                currentAngle += angleSpacing;
+              }
               break;
           }
 
@@ -199,26 +221,29 @@ void Update() {
   }
 
   public void SetStatus(Status status, float timeAmount = 0) {
-    switch (status) {
-      case Status.None:
-        ResetStatus();
-        break;
-      case Status.Rooted:
-        rootDuration = timeAmount;
-        rootStartTime = Time.time;
-        break;
-      case Status.Invunerable:
-        invunerableDuration = timeAmount;
-        invunerableStartTime = Time.time;
-        break;
+    if ((status & Status.Dashing) == Status.Dashing) {
+      dashDuration = timeAmount;
+      dashStartTime = Time.time;
     }
 
-    currentStatus = currentStatus & status;
+    if ((status & Status.AfterDashing) == Status.AfterDashing) {
+      afterDashDuration = timeAmount;
+      afterDashStartTime = Time.time;
+    }
+
+    if ((status & Status.Invunerable) == Status.Invunerable) {
+      invunerableDuration = timeAmount;
+      invunerableStartTime = Time.time;
+    }
+
+    currentStatus = currentStatus | status;
   }
 
   public void ResetStatus() {
-    rootDuration = 0;
-    rootStartTime = 0;
+    dashDuration = 0;
+    dashStartTime = 0;
+    afterDashDuration = 0;
+    afterDashStartTime = 0;
     invunerableDuration = 0;
     invunerableStartTime = 0;
     currentStatus = Status.None;
@@ -228,9 +253,16 @@ void Update() {
   }
 
   private void CheckExpiredStatus() {
-    if (rootDuration > 0 && Time.time > rootStartTime + rootDuration) {
-      rootDuration = 0;
-      currentStatus = currentStatus & ~Status.Rooted;
+    if (dashDuration > 0 && Time.time > dashStartTime + dashDuration) {
+      dashDuration = 0;
+      currentStatus = currentStatus & ~Status.Dashing;
+
+      SetStatus(Status.AfterDashing, 1);
+    }
+
+    if (afterDashDuration > 0 && Time.time > afterDashStartTime + afterDashDuration) {
+      afterDashDuration = 0;
+      currentStatus = currentStatus & ~Status.AfterDashing;
     }
 
     if (invunerableDuration > 0 && Time.time > invunerableStartTime + invunerableDuration) {

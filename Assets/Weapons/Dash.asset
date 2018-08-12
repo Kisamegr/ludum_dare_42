@@ -14,6 +14,6 @@ MonoBehaviour:
   weaponName: Dash
   type: 0
   cooldown: 1
-  ammo: 3
+  ammo: 5
   bullet: {fileID: 0}
   hasSecondActivation: 0

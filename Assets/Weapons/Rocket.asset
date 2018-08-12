@@ -14,6 +14,6 @@ MonoBehaviour:
   weaponName: Rocket Launcher
   type: 1
   cooldown: 1
-  ammo: 3
+  ammo: 5
   bullet: {fileID: 1679440652384720, guid: f3512d54559c9764d9054c4470423f88, type: 2}
   hasSecondActivation: 1

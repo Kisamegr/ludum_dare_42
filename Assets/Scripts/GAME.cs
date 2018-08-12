@@ -90,7 +90,8 @@ public class GAME : MonoBehaviour {
 
       SetWallPositionsAndScale();
 
-      if ((Time.time - lastLevelLoadTime) > countdownTimer && remainingEnemies == 0)
+      Enemy[] enemies = FindObjectsOfType<Enemy>();
+      if ((Time.time - lastLevelLoadTime) > countdownTimer && enemies.Length == 0)
       {
         if (remainingSpawnEvents.Count == 0)
           LoadNextLevel();

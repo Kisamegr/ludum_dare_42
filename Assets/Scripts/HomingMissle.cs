@@ -28,12 +28,17 @@ public class HomingMissle : Bullet {
     
   }
 
-  private void FindTarget() {
-    Collider2D colliderHit = Physics2D.OverlapCircle(this.transform.position, searchRadius, 1 << LayerMask.NameToLayer("Enemy"));
+  public void ShootOffset(float angleOffset) {
+    float bulletAngle = Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + angleOffset);
+    Vector2 bulletDir = new Vector2(Mathf.Cos(bulletAngle), Mathf.Sin(bulletAngle));
+    body.velocity = bulletDir * bulletSpeed;
+  }
 
-    if(colliderHit != null) {
-      target = colliderHit.gameObject;
-      Debug.Log("FOUND  " + colliderHit.name);
+  private void FindTarget() {
+    Collider2D[] collidersHit = Physics2D.OverlapCircleAll(this.transform.position, searchRadius, 1 << LayerMask.NameToLayer("Enemy"));
+
+    if(collidersHit != null && collidersHit.Length > 0) {
+      target = collidersHit[Random.Range(0, collidersHit.Length)].gameObject;
       CancelInvoke("FindTarget");
       searching = false;
     }

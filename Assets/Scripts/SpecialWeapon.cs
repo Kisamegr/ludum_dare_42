@@ -15,4 +15,5 @@ public class SpecialWeaponObject : ScriptableObject {
   public int ammo;
   public GameObject bullet;
   public bool hasSecondActivation;
+  public float count = 1;
 }

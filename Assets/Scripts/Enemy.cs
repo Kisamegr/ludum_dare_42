@@ -63,18 +63,24 @@ public class Enemy : MonoBehaviour {
 
   public void OnCollisionEnter2D(Collision2D collision) {
     if (collision.collider.CompareTag(player.tag)) {
-      switch (enemyType)
-      {
-        case EnemyType.Type1:
-          player.GetDamage(meleeDamage);
-          Die();
-          break;
-        case EnemyType.Type2:
-          //TODO use pushAmount variable?
-          player.GetPushed(meleeDamage); 
-          break;
-        default:
-          break;
+
+      if(player.HasStatus(Player.Status.Invunerable)) {
+        GetDamage(player.invunerableDamage);
+      }
+      else {
+        switch (enemyType)
+        {
+          case EnemyType.Type1:
+            player.GetDamage(meleeDamage);
+            Die();
+            break;
+          case EnemyType.Type2:
+            //TODO use pushAmount variable?
+            player.GetPushed(meleeDamage); 
+            break;
+          default:
+            break;
+        }
       }
     }
   }
@@ -92,7 +98,7 @@ public class Enemy : MonoBehaviour {
     }
   }
 
-  public void GetDamage(int damageAmount) {
+  public void GetDamage(float damageAmount) {
     currentHp -= damageAmount;
     if (currentHp <= 0)
       Die();
