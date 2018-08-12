@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 50573333551871010}
   - component: {fileID: 114484091697156716}
   m_Layer: 12
-  m_Name: Enemy Type2
+  m_Name: Enemy Type3
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,6 +169,7 @@ MonoBehaviour:
   bulletSpawnOffset: {fileID: 0}
   scorePickupPrefab: {fileID: 4033669490232630, guid: 76bffbd026b393041b4af6f922e94098,
     type: 2}
+  pickupsDropCount: 2
 --- !u!212 &212236562284231032
 SpriteRenderer:
   m_ObjectHideFlags: 1

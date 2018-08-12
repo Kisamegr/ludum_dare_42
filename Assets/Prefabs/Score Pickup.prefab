@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1504795301117672}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.35, y: 1.1, z: -0.13018285}
+  m_LocalPosition: {x: 0.25167766, y: 4.35, z: -0.13018285}
   m_LocalScale: {x: 0.08, y: 0.05, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -56,7 +56,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 2
   m_LinearDrag: 0
-  m_AngularDrag: 2
+  m_AngularDrag: 0.2
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -99,9 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772b8add22349004f81146d83235bbb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetime: 10
+  lifetime: 4
   score: 10
-  flickerDuration: 3
+  flickerDuration: 2
+  magnetRadius: 2
+  magneticForce: 400
 --- !u!212 &212290088202865636
 SpriteRenderer:
   m_ObjectHideFlags: 1

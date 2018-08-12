@@ -15,11 +15,11 @@ MonoBehaviour:
   enemySpawnEvents:
   - enemySpawns:
     - enemy: {fileID: 1871962711690566, guid: 93cb98d68ef1eb244b8407871a6d7526, type: 2}
-      count: 6
+      count: 12
     - enemy: {fileID: 1871962711690566, guid: 39589ca7ffb024d4ab7a07ce57f038ad, type: 2}
       count: 1
   - enemySpawns:
     - enemy: {fileID: 1871962711690566, guid: 93cb98d68ef1eb244b8407871a6d7526, type: 2}
-      count: 7
+      count: 15
     - enemy: {fileID: 1871962711690566, guid: 39589ca7ffb024d4ab7a07ce57f038ad, type: 2}
       count: 2

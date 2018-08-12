@@ -113,8 +113,26 @@ public class TopDownCharacterController : MonoBehaviour {
   public void GetDamage(int damageAmount) {
     if (!HasStatus(Status.Invunerable)) {
       _GAME.ChangeWallBorders(false, -damageAmount);
+
+      var vcam = GameObject.Find("Follow Cam").GetComponent<Cinemachine.CinemachineVirtualCamera>();
+      var noise = vcam.GetCinemachineComponent<Cinemachine.CinemachineBasicMultiChannelPerlin>();
+
+      noise.m_AmplitudeGain = 2;
+      noise.m_FrequencyGain = 4;
+
+      Invoke("StopShaking", 0.4f);
     }
   }
+
+  private void StopShaking()
+  {
+    var vcam = GameObject.Find("Follow Cam").GetComponent<Cinemachine.CinemachineVirtualCamera>();
+    var noise = vcam.GetCinemachineComponent<Cinemachine.CinemachineBasicMultiChannelPerlin>();
+
+    noise.m_AmplitudeGain = 0;
+    noise.m_FrequencyGain = 0;
+  }
+
 
 
   public void GetPushed(float force) {

@@ -146,10 +146,8 @@ public class TopDownGame : MonoBehaviour {
     }
 
     angle *= Mathf.Deg2Rad;
-    Vector2 playerDir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-    Debug.Log(LayerMask.NameToLayer("Wall"));
-    var layermask = 1 << LayerMask.NameToLayer("Wall");
-    Debug.Log(layermask);
+    Vector2 playerDir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)); 
+    var layermask = 1 << LayerMask.NameToLayer("Wall"); 
     RaycastHit2D hit = Physics2D.Raycast(player.transform.position, playerDir,Mathf.Infinity, layermask);
     if(hit.collider != null)
     {

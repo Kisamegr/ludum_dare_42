@@ -23,16 +23,19 @@ public class Bullet : MonoBehaviour {
   }
 
   protected virtual void OnTriggerEnter2D(Collider2D collision) {
-    //if simple type1
-
-    Debug.Log(collision.name);
+    //if simple type1 
     if (collision.CompareTag(targetTag)) {
       HitTarget(collision.gameObject);
+
+      //TODO - check for extra skill
+      if (true)
+        Destroy(gameObject);
     }
 
     if (collision.CompareTag("Wall")) { 
       Destroy(gameObject);
     }
+
   }
 
 }

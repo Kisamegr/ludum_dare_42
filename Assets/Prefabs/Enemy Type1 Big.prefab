@@ -109,6 +109,7 @@ MonoBehaviour:
   bulletSpawnOffset: {fileID: 0}
   scorePickupPrefab: {fileID: 4033669490232630, guid: 76bffbd026b393041b4af6f922e94098,
     type: 2}
+  pickupsDropCount: 4
 --- !u!212 &212155643223238364
 SpriteRenderer:
   m_ObjectHideFlags: 1

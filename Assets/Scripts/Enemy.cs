@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour {
   public GameObject bulletPrefab;
   public Transform bulletSpawnOffset;
   public Transform scorePickupPrefab;
+  public int pickupsDropCount = 1;
 
   private TopDownCharacterController player;
   private Rigidbody2D _rigidbody;
@@ -101,7 +102,15 @@ public class Enemy : MonoBehaviour {
     TopDownGame.Instance().EnemyDied();
     TopDownGame.Instance().ChangeWallBorders(true, 5);
     Destroy(gameObject);
-    Instantiate(scorePickupPrefab, transform.position, Quaternion.identity);
+
+    float pickupSize = scorePickupPrefab.GetComponent<SpriteRenderer>().bounds.size.x;
+    for (int i = 0; i < pickupsDropCount; i++)
+    {
+      float x = Random.value * (pickupsDropCount - 1) * pickupSize;
+      float y = Random.value * (pickupsDropCount - 1) * pickupSize;
+      Vector3 offset = new Vector3(x, y, 0);
+      Instantiate(scorePickupPrefab, transform.position + offset, Quaternion.identity);
+    }
 
   }
 
