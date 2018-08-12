@@ -24,10 +24,10 @@ public class Bullet : MonoBehaviour {
     Shoot(bulletSpeed);
   }
 
-  public void Shoot(float bulletSpeed) {
+  public void Shoot(float givenSpeed) {
     float bulletAngle = Mathf.Deg2Rad * transform.rotation.eulerAngles.z;
     Vector2 bulletDir = new Vector2(Mathf.Cos(bulletAngle), Mathf.Sin(bulletAngle));
-    body.velocity = bulletDir * bulletSpeed;
+    body.velocity = bulletDir * givenSpeed;
   }
 
   public virtual void HitTarget(GameObject target) {

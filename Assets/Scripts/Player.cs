@@ -91,7 +91,7 @@ void Update() {
       bullet.damageAmount = bulletDamage;
       bullet.transform.localScale = new Vector3(bulletSize, bulletSize, 1);
       
-      bullet.Shoot(playerLevels.bulletSpeedLevels[currentBulletSpeedLevel]);
+      bullet.Shoot(bulletSpeed);
 
       lastShootTime = Time.time;
     }
@@ -105,7 +105,7 @@ void Update() {
   public void IncreaseBulletPower()
   {
     currentBulletPowerLevel += 1;
-    currentBulletPowerLevel = Mathf.Min(currentBulletPowerLevel, playerLevels.bulletDamageLevels.Length);
+    currentBulletPowerLevel = Mathf.Min(currentBulletPowerLevel, playerLevels.bulletDamageLevels.Length - 1);
     bulletDamage = playerLevels.bulletDamageLevels[currentBulletPowerLevel];
     bulletSize = playerLevels.bulletSizeLevels[currentBulletPowerLevel]; 
   }
@@ -113,7 +113,7 @@ void Update() {
   public void IncreaseBulletSpeed()
   {
     currentBulletSpeedLevel += 1;  
-    currentBulletSpeedLevel = Mathf.Min(currentBulletSpeedLevel, playerLevels.bulletSpeedLevels.Length);
+    currentBulletSpeedLevel = Mathf.Min(currentBulletSpeedLevel, playerLevels.bulletSpeedLevels.Length - 1);
     bulletSpeed = playerLevels.bulletSpeedLevels[currentBulletSpeedLevel];
     shootInterval = playerLevels.bulletShootIntervalLevels[currentBulletSpeedLevel];
   }
@@ -121,7 +121,7 @@ void Update() {
   public void IncreasePlayerSpeed()
   {
     currentSpeedLevel += 1;  
-    currentSpeedLevel = Mathf.Min(currentSpeedLevel, playerLevels.playerSpeedLevels.Length);
+    currentSpeedLevel = Mathf.Min(currentSpeedLevel, playerLevels.playerSpeedLevels.Length - 1);
     maxSpeed = playerLevels.playerSpeedLevels[currentSpeedLevel]; 
   }
 

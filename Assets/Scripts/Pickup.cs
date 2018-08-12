@@ -95,7 +95,7 @@ public class Pickup: MonoBehaviour {
           //GAME.Instance().IncreaseScore(score);
           break;
         case PickupType.IncreaseBulletSpeed:
-          player.IncreaseBulletPower();
+          player.IncreaseBulletSpeed();
           break;
         case PickupType.IncreaseBulletPower:
           player.IncreaseBulletPower();
