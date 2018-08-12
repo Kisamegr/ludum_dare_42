@@ -24,7 +24,6 @@ public class RocketBullet : Bullet {
     Collider2D[] collidersHit = Physics2D.OverlapCircleAll(transform.position, explosionRadius, layerMask);
 
     foreach (Collider2D collider in collidersHit) {
-      Debug.Log(collider.name);
       if (collider.CompareTag(targetTag)) {
         collider.gameObject.SendMessage("GetDamage", damageAmount);
       }

@@ -84,7 +84,6 @@ void Update() {
     velocity.x = Input.GetAxis("Horizontal") * maxSpeed;
     velocity.y = Input.GetAxis("Vertical") * maxSpeed;
 
-    Debug.Log(currentStatus);
     if(HasStatus(Status.Dashing)) {
       body.velocity = dashDirection * dashSpeed;
     }
@@ -144,14 +143,9 @@ void Update() {
 
   void SpecialShoot()
   {
-    if(Input.GetMouseButtonDown(1)){
-      Debug.Log("special shoot 1 ");
-    }
-
     if (specialWeapon != null) {
 
       if (Input.GetMouseButtonDown(1)) {
-        Debug.Log("special shoot 2 ");
         if (specialWeapon.hasSecondActivation && currentSpecialBullet != null) {
           currentSpecialBullet.HitTarget(currentSpecialBullet.gameObject);
         }
@@ -180,7 +174,10 @@ void Update() {
 
           //specialWeapon.ammo--;
           currentAmmo--;
+          UiManager.Instance().DecreaseAmmo();
+
           lastSpecialShootTime = Time.time;
+
 
           if (currentAmmo == 0)
             specialWeapon = null;
@@ -195,6 +192,13 @@ void Update() {
     currentSpecialBullet = null;
     lastSpecialShootTime = 0;
     currentAmmo = specialWeapon.ammo;
+
+    SpriteRenderer bulletRenderer = weapon.bullet.GetComponent<SpriteRenderer>();
+
+    UiManager.Instance().SetSpecialWeapon(
+      bulletRenderer.sprite,
+      bulletRenderer.color,
+      currentAmmo);
   }
 
   public void GetDamage(int damageAmount) {

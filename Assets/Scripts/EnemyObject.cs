@@ -6,5 +6,4 @@ public class EnemyObject : ScriptableObject {
   public EnemyType type;
   public float moveSpeed;
 
-
 }

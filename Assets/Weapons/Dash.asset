@@ -15,5 +15,6 @@ MonoBehaviour:
   type: 0
   cooldown: 1
   ammo: 5
-  bullet: {fileID: 0}
+  bullet: {fileID: 1811713034693654, guid: ceb16eb7f8b00f941b527b0af9b2ed7b, type: 2}
   hasSecondActivation: 0
+  count: 1

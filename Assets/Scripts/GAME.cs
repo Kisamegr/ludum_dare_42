@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GAME : MonoBehaviour {
 
   public float countdownTimer = 3;
+  public float waveCountdownTimer = 1;
   public bool wallsClosing = true;
   public Vector2 mapSize = new Vector2(20, 20);
   public float wallThickness = 10; 
@@ -26,10 +27,13 @@ public class GAME : MonoBehaviour {
   private Transform player;
 
   private int currentLevel = 0;
+  private int currentWave = 0;
   private float lastLevelLoadTime;
 
   private Queue<EnemySpawnEvent> remainingSpawnEvents;
   private int remainingEnemies = 0;
+
+  bool startedNextWave = false;
 
   public enum WallType {
     Left, Top, Right, Bottom
@@ -67,7 +71,10 @@ public class GAME : MonoBehaviour {
       new Vector2(mapSize.x / 2 + showMargin, mapSize.y / 2 + showMargin),
       new Vector2(mapSize.x / 2 + showMargin, -mapSize.y / 2 - showMargin) };
 
-    LoadNextLevel();
+    ResetWalls();
+
+    UiManager.Instance().NextLevel(countdownTimer);
+    lastLevelLoadTime = Time.time;
 
     isGameover = false;
     score = 0;
@@ -80,7 +87,7 @@ public class GAME : MonoBehaviour {
     if (isGameover)
       if (Input.anyKeyDown)
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-      
+
     if (!isGameover)
     {
       if ((Time.time - lastLevelLoadTime) > countdownTimer && wallsClosing)
@@ -93,10 +100,14 @@ public class GAME : MonoBehaviour {
       Enemy[] enemies = FindObjectsOfType<Enemy>();
       if ((Time.time - lastLevelLoadTime) > countdownTimer && enemies.Length == 0)
       {
-        if (remainingSpawnEvents.Count == 0)
-          LoadNextLevel();
-        else
-          NextSpawn();
+        if (remainingSpawnEvents.Count == 0) {
+          UiManager.Instance().NextLevel(countdownTimer);
+          lastLevelLoadTime = Time.time;
+        }
+        else if (!startedNextWave) {
+          Invoke("NextWaveSpawn", currentWave == 0 ? 0 : waveCountdownTimer);
+          startedNextWave = true;
+        }
       }
     }
 
@@ -242,16 +253,19 @@ public class GAME : MonoBehaviour {
     }
   }
 
-  void LoadNextLevel() {
+  private void ResetWalls() {
     mapBorders = new MapBorder[4];
     mapBorders[0] = new MapBorder(wallParent.Find("Left"), WallType.Left, mapSize.x / 2);
     mapBorders[1] = new MapBorder(wallParent.Find("Top"), WallType.Top, mapSize.y / 2);
     mapBorders[2] = new MapBorder(wallParent.Find("Right"), WallType.Right, mapSize.x / 2);
     mapBorders[3] = new MapBorder(wallParent.Find("Bottom"), WallType.Bottom, mapSize.y / 2);
+  }
 
-    lastLevelLoadTime = Time.time;
+  public void LoadNextLevel() {
 
+    ResetWalls();
     remainingSpawnEvents.Clear();
+    currentWave = 0;
 
     if (CurrentLevel < levels.Length) {
       LevelObject level = levels[CurrentLevel];
@@ -262,12 +276,11 @@ public class GAME : MonoBehaviour {
     }
   }
 
-  void NextSpawn() {
+  void NextWaveSpawn() {
     EnemySpawnEvent spawnEvent = remainingSpawnEvents.Dequeue();
 
     Rect mapSize = CurrentMapSize();
 
-    Debug.Log(mapSize);
     foreach (EnemySpawn spawn in spawnEvent.enemySpawns) {
       for (int i = 0; i<spawn.count; i++) {
         Vector3 position = new Vector3(
@@ -285,6 +298,9 @@ public class GAME : MonoBehaviour {
         remainingEnemies++;
       }
     }
+
+    currentWave++;
+    startedNextWave = false;
   }
 
   public void EnemyDied() {
@@ -329,7 +345,6 @@ public class GAME : MonoBehaviour {
 
     public MapBorder(Transform transform, WallType type, float borderPosition) {
       this.Transform = transform;
-      Debug.Log(transform.name);
       this.Type = type;
       this.Renderer = transform.GetComponent<SpriteRenderer>();
       this.borderPosition = borderPosition;

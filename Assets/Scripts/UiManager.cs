@@ -11,12 +11,23 @@ public class UiManager : MonoBehaviour
   public TextMeshProUGUI scoreText;
   public TextMeshProUGUI gameoverText;
   public TextMeshProUGUI timeText;
-  public GameObject explosionPrefab; 
+  public GameObject explosionPrefab;
+  public TextMeshProUGUI countdownText;
+  public Animator countdownAnimator;
 
   public GameObject LinePrefab;
 
+  public Transform weaponUiOverlay;
+  public GameObject weaponUiPrefab;
+
+
   private GAME game;
-  private static UiManager _instance; 
+  private static UiManager _instance;
+
+  public bool countdownPlaying = false;
+  private float countdownDuration = 0;
+
+  private Queue<Image> weaponUiImages;
 
   public static UiManager Instance()
   {
@@ -32,6 +43,7 @@ public class UiManager : MonoBehaviour
   void Start()
   {
     game = GAME.Instance();
+    weaponUiImages = new Queue<Image>();
 
     CreateGrid();
 
@@ -72,12 +84,25 @@ public class UiManager : MonoBehaviour
       : "Level -";
 
     UpdateTimeText();
+
+    if(countdownPlaying) {
+      countdownText.text = Mathf.CeilToInt(countdownDuration).ToString();
+      countdownDuration -= Time.deltaTime;
+
+      if(countdownDuration <= 0) {
+        countdownPlaying = false;
+        countdownText.gameObject.SetActive(false);
+        countdownAnimator.StopPlayback();
+        GAME.Instance().LoadNextLevel();
+      }
+    }
   }
   
 
-  public void NextLevel(float duration)
-  {
-
+  public void NextLevel(float duration) {
+    countdownDuration = duration;
+    countdownPlaying = true;
+    countdownText.gameObject.SetActive(true);
   }
 
   private void UpdateTimeText()
@@ -136,6 +161,25 @@ public class UiManager : MonoBehaviour
     main.startSpeedMultiplier = speedMultiplier;
 
     Destroy(explosion, 3);
+  }
+
+  public void SetSpecialWeapon(Sprite sprite, Color color, int ammo) {
+    foreach (Image weaponUi in weaponUiImages)
+      Destroy(weaponUi.gameObject);
+
+    weaponUiImages.Clear();
+
+    for(int i=0; i<ammo; i++) {
+      Image image = Instantiate(weaponUiPrefab, weaponUiOverlay).GetComponent<Image>();
+
+      image.sprite = sprite;
+      image.color = color;
+      weaponUiImages.Enqueue(image);
+    }
+  }
+
+  public void DecreaseAmmo() {
+    Destroy(weaponUiImages.Dequeue());
   }
 
 }
