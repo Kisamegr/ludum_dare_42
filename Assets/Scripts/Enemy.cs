@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour {
   public Transform bulletSpawnOffset;
   public Transform scorePickupPrefab;
   public int pickupsDropCount = 1;
+  public GameObject pickupDropPrefab;
 
   private Player player;
   private Rigidbody2D _rigidbody;
@@ -101,7 +102,6 @@ public class Enemy : MonoBehaviour {
   public void Die() {
     GAME.Instance().EnemyDied();
     GAME.Instance().ChangeWallBorders(true, 5);
-    Destroy(gameObject);
 
     float pickupSize = scorePickupPrefab.GetComponent<SpriteRenderer>().bounds.size.x;
     for (int i = 0; i < pickupsDropCount; i++)
@@ -113,6 +113,10 @@ public class Enemy : MonoBehaviour {
     }
     UiManager.Instance().MakeExplosion(transform.position, 30, GetComponent<SpriteRenderer>().color);
 
+    if (pickupDropPrefab != null)
+      Instantiate(pickupDropPrefab, transform.position, Quaternion.identity);
+
+    Destroy(gameObject);
   }
 
 

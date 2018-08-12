@@ -25,6 +25,7 @@ public class Pickup: MonoBehaviour {
   public float flickerDuration = 3f;
   public float magnetRadius = 1f;
   public float magneticForce = 10;
+  public ScriptableObject scriptableObject;
 
   private float creationTime;
   private Rigidbody2D _rigidbody;
@@ -102,6 +103,9 @@ public class Pickup: MonoBehaviour {
         case PickupType.IncreasePlayerSpeed:
           player.IncreasePlayerSpeed();
           break;
+        case PickupType.SpecialSkill:
+          player.SetSpecialWeapon((SpecialWeaponObject) scriptableObject);
+          break;
         default:
           break;
       }
@@ -111,4 +115,33 @@ public class Pickup: MonoBehaviour {
    
 
 
+}
+
+[CreateAssetMenu(fileName = "PickupTable", menuName = "Pickup Table")]
+public class PickupTable : ScriptableObject {
+  public PickupInfo[] pickupInfos;
+
+  public GameObject ChoosePickup() {
+    float totalWeight = 0;
+    foreach (PickupInfo info in pickupInfos)
+      totalWeight += info.weight;
+
+    float r = UnityEngine.Random.Range(0, totalWeight);
+
+    totalWeight = 0;
+    foreach (PickupInfo info in pickupInfos) {
+      totalWeight += info.weight;
+
+      if (r < totalWeight)
+        return info.pickupPrefab;
+    }
+
+    return null;
+  }
+}
+
+[Serializable]
+public class PickupInfo {
+  public GameObject pickupPrefab;
+  public float weight = 1;
 }

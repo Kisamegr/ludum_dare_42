@@ -11,6 +11,8 @@ public class GAME : MonoBehaviour {
   public float wallThickness = 10; 
   public float wallSpeed = 0.5f;
   public float wallLerpSpeed = 1;
+  public float pickupDropChance = 0.3f;
+  public PickupTable pickupTable;
 
   public LevelObject[] levels;
   private bool isGameover;
@@ -271,7 +273,13 @@ public class GAME : MonoBehaviour {
           Random.Range(mapSize.yMin, mapSize.yMax),
           0);
 
-        GameObject enemyObj = Instantiate(spawn.enemy, position, Quaternion.identity);
+        Enemy enemy = Instantiate(spawn.enemy, position, Quaternion.identity).GetComponent<Enemy>();
+
+        // Give the enemy a pickup to drop
+        if(Random.value < pickupDropChance) {
+          enemy.pickupDropPrefab = pickupTable.ChoosePickup();
+        }
+
         remainingEnemies++;
       }
     }
@@ -334,5 +342,4 @@ public class GAME : MonoBehaviour {
 
 
   }
-
 }

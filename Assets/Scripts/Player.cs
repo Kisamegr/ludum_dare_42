@@ -9,7 +9,6 @@ public class Player : MonoBehaviour {
   public float speedDamping = 0.12f;
   public GameObject primaryBulletPrefab; 
   public Status currentStatus;
-  public SpecialWeaponObject specialWeapon;
   public PlayerLevelsObject playerLevels;
 
   private float lastShootTime = 0;
@@ -40,6 +39,7 @@ public class Player : MonoBehaviour {
   private int currentAmmo = 100;
 
   private Bullet currentSpecialBullet = null;
+  private SpecialWeaponObject specialWeapon;
 
   [Flags]
   public enum Status {
@@ -133,7 +133,6 @@ void Update() {
 
         if (specialWeapon.hasSecondActivation && currentSpecialBullet != null) {
           currentSpecialBullet.HitTarget(currentSpecialBullet.gameObject);
-
         }
         if (lastSpecialShootTime + specialWeapon.cooldown < Time.time) {
           switch (specialWeapon.type) {
@@ -156,7 +155,6 @@ void Update() {
           currentAmmo--;
           lastSpecialShootTime = Time.time;
 
-
           if (currentAmmo == 0)
             specialWeapon = null;
         }
@@ -165,6 +163,12 @@ void Update() {
     }
   }
 
+  public void SetSpecialWeapon(SpecialWeaponObject weapon) {
+    specialWeapon = weapon;
+    currentSpecialBullet = null;
+    lastSpecialShootTime = 0;
+    currentAmmo = specialWeapon.ammo;
+  }
 
   public void GetDamage(int damageAmount) {
     if (!HasStatus(Status.Invunerable)) {
