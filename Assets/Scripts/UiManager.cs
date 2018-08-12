@@ -11,8 +11,9 @@ public class UiManager : MonoBehaviour
   public TextMeshProUGUI scoreText;
   public TextMeshProUGUI gameoverText;
   public TextMeshProUGUI timeText;
+  public GameObject explosionPrefab;
 
-  private TopDownGame game;
+  private GAME game;
 
   private static UiManager _instance;
 
@@ -29,7 +30,7 @@ public class UiManager : MonoBehaviour
   // Use this for initialization
   void Start()
   {
-    game = TopDownGame.Instance();
+    game = GAME.Instance();
   }
 
   // Update is called once per frame
@@ -87,6 +88,22 @@ public class UiManager : MonoBehaviour
   public void FadeOut(float duration)
   {
 
+  }
+
+  public void MakeExplosion(Vector2 position, int noParticles, Color c, float speedMultiplier = 1f)
+  {
+    GameObject explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
+    ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
+
+    ps.emission.SetBurst(0, new ParticleSystem.Burst(0, noParticles));
+
+    var main = ps.main;
+    c.a = main.startColor.color.a;
+    main.startColor = c;
+
+    main.startSpeedMultiplier = speedMultiplier;
+
+    Destroy(explosion, 3);
   }
 
 }

@@ -66,7 +66,7 @@ public class ScorePickup : MonoBehaviour {
   { 
     if (collision.gameObject.CompareTag("Player"))
     {
-      TopDownGame.Instance().IncreaseScore(score);
+      GAME.Instance().IncreaseScore(score);
       Disappear();
     }
   }

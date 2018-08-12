@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TopDownGame : MonoBehaviour {
+public class GAME : MonoBehaviour {
 
   public float countdownTimer = 3;
   public bool wallsClosing = true;
@@ -35,7 +35,7 @@ public class TopDownGame : MonoBehaviour {
 
   private UiManager ui_manager;
 
-  private static TopDownGame _instance;
+  private static GAME _instance;
 
   public int CurrentLevel {
     get {
@@ -43,7 +43,7 @@ public class TopDownGame : MonoBehaviour {
     }
   }
 
-  public static TopDownGame Instance() {
+  public static GAME Instance() {
     return _instance;
   }
 
