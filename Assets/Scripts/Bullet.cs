@@ -34,11 +34,7 @@ public class Bullet : MonoBehaviour {
     //if simple type1 
     if (target.CompareTag(targetTag)) {
       target.SendMessage("GetDamage", damageAmount);
-
-
-      //TODO - penetration powerup/skill
-      if (true)
-        Destroy(gameObject);
+      Destroy(gameObject);
     }
 
     if (target.CompareTag("Wall")) {

@@ -8,12 +8,12 @@ using UnityEngine;
 /// Type2: Push on collision
 /// Type3: Turret
 /// </summary>
-public enum EnemyType { Type1, Type2, Type3, Type4, Type5, Type6 };
+public enum EnemyType { Simple, Wall, Turret, Star, Type5, Type6 };
 
 
 public class Enemy : MonoBehaviour {
 
-  public EnemyType enemyType = EnemyType.Type1;
+  public EnemyType enemyType = EnemyType.Simple;
   public float moveSpeed = 5f;
   public int meleeDamage = 1;
   public float hp = 1;
@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour {
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
     currentHp = hp;
 
-    if(enemyType == EnemyType.Type4)
+    if(enemyType == EnemyType.Star)
     {
       _rigidbody.angularVelocity = 700f;
 
@@ -74,23 +74,44 @@ public class Enemy : MonoBehaviour {
 
     switch (enemyType)
     {
-      case EnemyType.Type1:
+      case EnemyType.Simple:
         _rigidbody.velocity = moveDir * moveSpeed;
         break;
-      case EnemyType.Type2:
-        _rigidbody.velocity = moveDir * moveSpeed; 
+      case EnemyType.Wall:
+        Rect currentMapSize = GAME.Instance().CurrentMapSize();
+        //float area = Mathf.Pow(currentMapSize.width,2) + Mathf.Pow(currentMapSize.height, 2);
+        //float maxArea = Mathf.Pow(GAME.Instance().mapSize.x, 2) + Mathf.Pow(GAME.Instance().mapSize.x, 2);
+        //float speed = 1 - area / maxArea;
+
+        if (!currentMapSize.Contains(transform.position))
+        {
+          Vector2 tp = transform.position;
+          moveDir = (currentMapSize.center - tp).normalized;
+          _rigidbody.velocity = moveDir * moveSpeed;
+        }
+        else
+        {
+          _rigidbody.velocity = Vector2.zero;
+
+        }
+
+        //Nothing
         break;
-      case EnemyType.Type3:
+      case EnemyType.Turret:
         //Extrapolate maybe to predict future movement (+ noise)
         float angle = Vector2.SignedAngle(Vector2.right, moveDir);
         transform.rotation = Quaternion.Euler(0, 0, angle);
         Shoot();
         break;
-      case EnemyType.Type4: 
+      case EnemyType.Star: 
         transform.RotateAround(pivotPoint, new Vector3(0, 0, 1), rotateSpeed);
         break;
+      case EnemyType.Type5:
+        _rigidbody.velocity = moveDir * moveSpeed;
+        break;
+
     }
-    
+
   }
 
   public void OnCollisionEnter2D(Collision2D collision)
@@ -105,11 +126,11 @@ public class Enemy : MonoBehaviour {
       else {
         switch (enemyType)
         {
-          case EnemyType.Type1:
+          case EnemyType.Simple:
             player.GetDamage(meleeDamage);
             Die();
             break;
-          case EnemyType.Type2:
+          case EnemyType.Type5:
             //TODO use pushAmount variable?
             player.GetPushed(meleeDamage); 
             break;

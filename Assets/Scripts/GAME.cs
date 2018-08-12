@@ -289,9 +289,13 @@ public class GAME : MonoBehaviour {
           0);
 
         Enemy enemy = Instantiate(spawn.enemy, position, Quaternion.identity).GetComponent<Enemy>();
+        if (enemy.enemyType == EnemyType.Wall)
+        {
+          enemy.transform.rotation = Quaternion.Euler(0, 0, Random.value * 360);
+        }
 
         // Give the enemy a pickup to drop
-        if(Random.value < pickupDropChance) {
+        if (Random.value < pickupDropChance) {
           enemy.pickupDropPrefab = pickupTable.ChoosePickup();
         }
 

@@ -14,10 +14,19 @@ MonoBehaviour:
   id: 0
   enemySpawnEvents:
   - enemySpawns:
-    - enemy: {fileID: 1151960933072088, guid: ac8a4c057cafc3240b9ce2d1b7e30ecc, type: 2}
-      count: 3
+    - enemy: {fileID: 1871962711690566, guid: 39589ca7ffb024d4ab7a07ce57f038ad, type: 2}
+      count: 2
+    - enemy: {fileID: 1568934386650114, guid: 4986c2e76b2270246919be1ed0a0524f, type: 2}
+      count: 4
   - enemySpawns:
     - enemy: {fileID: 1871962711690566, guid: 93cb98d68ef1eb244b8407871a6d7526, type: 2}
-      count: 5
+      count: 7
     - enemy: {fileID: 1151960933072088, guid: ac8a4c057cafc3240b9ce2d1b7e30ecc, type: 2}
       count: 5
+    - enemy: {fileID: 1871962711690566, guid: 39589ca7ffb024d4ab7a07ce57f038ad, type: 2}
+      count: 4
+  - enemySpawns:
+    - enemy: {fileID: 1871962711690566, guid: 39589ca7ffb024d4ab7a07ce57f038ad, type: 2}
+      count: 4
+    - enemy: {fileID: 1086067375983926, guid: b99eade27ee32af429b1d0326fff4921, type: 2}
+      count: 2

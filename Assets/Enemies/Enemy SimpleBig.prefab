@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 50969980939889188}
   - component: {fileID: 114086377342373786}
   m_Layer: 12
-  m_Name: Enemy Type1 Big
+  m_Name: Enemy SimpleBig
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,12 +104,14 @@ MonoBehaviour:
   meleeDamage: 1
   hp: 5
   shootInterval: 5
-  bulletSpeed: 10
   bulletPrefab: {fileID: 0}
   bulletSpawnOffset: {fileID: 0}
   scorePickupPrefab: {fileID: 4033669490232630, guid: 76bffbd026b393041b4af6f922e94098,
     type: 2}
   pickupsDropCount: 4
+  pickupDropPrefab: {fileID: 0}
+  colorHitDamping: 0.2
+  colorHitWhite: 0.7
 --- !u!212 &212155643223238364
 SpriteRenderer:
   m_ObjectHideFlags: 1

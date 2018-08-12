@@ -343,7 +343,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 212030457}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000035762787, y: 0.00000011920929, z: -10}
+  m_LocalPosition: {x: -0.00000047683716, y: 0.00000011920929, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -715,7 +715,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 992973832}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000035762787, y: 0.00000011920929, z: -10}
+  m_LocalPosition: {x: -0.00000047683716, y: 0.00000011920929, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1913477491}
@@ -1489,17 +1489,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countdownTimer: 3
+  waveCountdownTimer: 1
   wallsClosing: 1
   mapSize: {x: 25, y: 25}
   wallThickness: 10
   wallSpeed: 3
   wallLerpSpeed: 3
-  pickupDropChance: 0.3
+  pickupDropChance: 0.05
   pickupTable: {fileID: 11400000, guid: ff9b012b54ce49844b7a738fae047d1d, type: 2}
   levels:
   - {fileID: 11400000, guid: e7887166e68451148ba08046f659f17d, type: 2}
   - {fileID: 11400000, guid: d8fb6e4a2d87c2942b441dd6527df798, type: 2}
   - {fileID: 11400000, guid: 2d0f490e22240b84bb99e6b315e494cd, type: 2}
+  - {fileID: 11400000, guid: 86ec0119c23565b4981c1338bbd24de0, type: 2}
 --- !u!4 &1463579141
 Transform:
   m_ObjectHideFlags: 0
