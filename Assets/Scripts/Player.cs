@@ -92,7 +92,7 @@ public class Player : MonoBehaviour {
             break;
           case SpecialWeaponObject.WeaponType.Rocket:
             RocketBullet rocket = (RocketBullet) CreateBullet(specialWeapon.bullet);
-            rocket.Shoot(bulletSpeed);
+            rocket.Shoot(bulletSpeed/2);
             break;
           case SpecialWeaponObject.WeaponType.Homing:
             break;

@@ -18,7 +18,4 @@ public class RocketBullet : Bullet {
     Destroy(gameObject);
   }
 
-  private void OnDrawGizmos() {
-    Gizmos.DrawSphere(transform.position, explosionRadius);
-  }
 }
