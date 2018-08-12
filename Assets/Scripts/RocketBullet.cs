@@ -9,7 +9,7 @@ public class RocketBullet : Bullet {
 
   private int layerMask;
 
-  private void Start() {
+  protected void Start() {
     Vector3 scale = new Vector3(
       explosionRadius*2 / (radiusIndicator.size.x * transform.localScale.x),
       explosionRadius*2 / (radiusIndicator.size.y * transform.localScale.y),
