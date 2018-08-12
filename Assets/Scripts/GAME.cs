@@ -100,7 +100,8 @@ public class GAME : MonoBehaviour {
     }
 
     Rect currentMapSize = CurrentMapSize();
-    if(currentMapSize.width < 0 || currentMapSize.height < 0)
+    Debug.Log(currentMapSize);
+    if (currentMapSize.width < 0 || currentMapSize.height < 0)
     {
       GameOver();
     }
@@ -290,18 +291,29 @@ public class GAME : MonoBehaviour {
   }
 
   public Rect CurrentMapSize() {
+
+
+
+    //return new Rect(
+    //  -mapBorders[(int)WallType.Left].BorderPosition,
+    //  -mapBorders[(int)WallType.Bottom].BorderPosition,
+    //  mapBorders[(int)WallType.Left].BorderPosition + mapBorders[(int)WallType.Right].BorderPosition,
+    //  mapBorders[(int)WallType.Top].BorderPosition + mapBorders[(int)WallType.Bottom].BorderPosition
+    //  ); 
+
     return new Rect(
-      -mapBorders[(int) WallType.Left].BorderPosition,
-      -mapBorders[(int) WallType.Bottom].BorderPosition,
-      mapBorders[(int) WallType.Left].BorderPosition + mapBorders[(int) WallType.Right].BorderPosition,
-      mapBorders[(int) WallType.Top].BorderPosition + mapBorders[(int) WallType.Bottom].BorderPosition
-      );
+      (mapBorders[(int)WallType.Right].Collider.bounds.min.x + mapBorders[(int)WallType.Left].Collider.bounds.max.x) / 2,
+      (mapBorders[(int)WallType.Bottom].Collider.bounds.max.y + mapBorders[(int)WallType.Top].Collider.bounds.min.y) / 2,
+      mapBorders[(int)WallType.Right].Collider.bounds.min.x - mapBorders[(int)WallType.Left].Collider.bounds.max.x,
+      mapBorders[(int)WallType.Top].Collider.bounds.min.y - mapBorders[(int)WallType.Bottom].Collider.bounds.max.y);
+
   }
  
   struct MapBorder {
     public Transform Transform { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
     public WallType Type { get; private set; }
+    public Collider2D Collider;
 
     public float BorderPosition {
       get { return borderPosition; }
@@ -316,9 +328,11 @@ public class GAME : MonoBehaviour {
 
     public MapBorder(Transform transform, WallType type, float borderPosition) {
       this.Transform = transform;
+      Debug.Log(transform.name);
       this.Type = type;
       this.Renderer = transform.GetComponent<SpriteRenderer>();
       this.borderPosition = borderPosition;
+      this.Collider = transform.GetComponent<Collider2D>();
       maxBorderPosition = borderPosition;
     }
   }
