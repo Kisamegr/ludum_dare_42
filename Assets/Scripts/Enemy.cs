@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour {
   public int hp = 1;
   //Only if type 3
   public float shootInterval = 0.2f;
-  public float bulletSpeed = 10f;
   public GameObject bulletPrefab;
   public Transform bulletSpawnOffset;
   public Transform scorePickupPrefab;
@@ -86,7 +85,7 @@ public class Enemy : MonoBehaviour {
     {
       GameObject bulletGO = Instantiate(bulletPrefab, position: bulletSpawnOffset.position, rotation: transform.rotation);
       Bullet bullet = bulletGO.GetComponent<Bullet>();
-      bullet.Shoot(bulletSpeed);
+      bullet.Shoot();
 
       lastShootTime = Time.time;
     }

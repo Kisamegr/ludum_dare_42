@@ -101,6 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletType: 0
   damageAmount: 1
+  bulletSpeed: 10
   pushForce: 1
   targetTag: Enemy
 --- !u!212 &212612874533662692

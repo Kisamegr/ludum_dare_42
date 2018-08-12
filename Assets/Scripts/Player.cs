@@ -10,7 +10,6 @@ public class Player : MonoBehaviour {
   public float speedDamping = 0.12f;
   public GameObject primaryBulletPrefab;
   public float shootInterval = 0.1f;
-  public float bulletSpeed = 10f;
   public Status currentStatus;
   public SpecialWeaponObject specialWeapon;
 
@@ -28,6 +27,8 @@ public class Player : MonoBehaviour {
   private GAME _GAME;
 
   private int currentAmmo = 100;
+
+  private Bullet currentSpecialBullet = null;
 
   [Flags]
   public enum Status {
@@ -68,9 +69,8 @@ public class Player : MonoBehaviour {
 
   void PrimaryShoot() {
     if (Input.GetAxis("Fire1") > 0 && Time.time - lastShootTime > shootInterval) {
-      float damageAmount = 5f; //TODO: make it a class variable
       Bullet bullet = CreateBullet(primaryBulletPrefab);
-      bullet.Shoot(bulletSpeed);
+      bullet.Shoot();
 
       lastShootTime = Time.time;
     }
@@ -84,26 +84,35 @@ public class Player : MonoBehaviour {
   void SpecialShoot() {
     if (specialWeapon != null) {
 
-      if (Input.GetAxis("Fire2") > 0 && lastSpecialShootTime + specialWeapon.cooldown < Time.time) {
-        switch (specialWeapon.type) {
-          case SpecialWeaponObject.WeaponType.Dash:
-            SetStatus(Status.Rooted | Status.Invunerable, 1);
-            body.AddForce(transform.right * 75, ForceMode2D.Impulse);
-            break;
-          case SpecialWeaponObject.WeaponType.Rocket:
-            RocketBullet rocket = (RocketBullet) CreateBullet(specialWeapon.bullet);
-            rocket.Shoot(bulletSpeed/2);
-            break;
-          case SpecialWeaponObject.WeaponType.Homing:
-            break;
+      if (Input.GetMouseButtonDown(1)) {
+
+        if (specialWeapon.hasSecondActivation && currentSpecialBullet != null) {
+          currentSpecialBullet.HitTarget(currentSpecialBullet.gameObject);
+
         }
+        if (lastSpecialShootTime + specialWeapon.cooldown < Time.time) {
+          switch (specialWeapon.type) {
+            case SpecialWeaponObject.WeaponType.Dash:
+              SetStatus(Status.Rooted | Status.Invunerable, 1);
+              body.AddForce(transform.right * 75, ForceMode2D.Impulse);
+              break;
+            case SpecialWeaponObject.WeaponType.Rocket:
+              RocketBullet rocket = (RocketBullet) CreateBullet(specialWeapon.bullet);
+              rocket.Shoot();
+              currentSpecialBullet = rocket;
+              break;
+            case SpecialWeaponObject.WeaponType.Homing:
+              break;
+          }
 
-        //specialWeapon.ammo--;
-        currentAmmo--;
-        lastSpecialShootTime = Time.time;
+          //specialWeapon.ammo--;
+          currentAmmo--;
+          lastSpecialShootTime = Time.time;
 
-        if (currentAmmo == 0)
-          specialWeapon = null;
+
+          if (currentAmmo == 0)
+            specialWeapon = null;
+        }
       }
 
     }
@@ -124,8 +133,7 @@ public class Player : MonoBehaviour {
     }
   }
 
-  private void StopShaking()
-  {
+  private void StopShaking() {
     var vcam = GameObject.Find("Follow Cam").GetComponent<Cinemachine.CinemachineVirtualCamera>();
     var noise = vcam.GetCinemachineComponent<Cinemachine.CinemachineBasicMultiChannelPerlin>();
 
@@ -169,7 +177,7 @@ public class Player : MonoBehaviour {
   }
 
   private void CheckExpiredStatus() {
-    if(rootDuration > 0 && Time.time > rootStartTime + rootDuration) {
+    if (rootDuration > 0 && Time.time > rootStartTime + rootDuration) {
       rootDuration = 0;
       currentStatus = currentStatus & ~Status.Rooted;
     }

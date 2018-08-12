@@ -5,14 +5,33 @@ using UnityEngine;
 public class RocketBullet : Bullet {
 
   public float explosionRadius;
+  public SpriteRenderer radiusIndicator;
 
-  protected override void OnTriggerEnter2D(Collider2D collision) {
-    Collider2D[] collidersHit = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+  private int layerMask;
 
-    foreach(Collider2D collider in collidersHit) {
+  private void Start() {
+    Vector3 scale = new Vector3(
+      explosionRadius*2 / (radiusIndicator.size.x * transform.localScale.x),
+      explosionRadius*2 / (radiusIndicator.size.y * transform.localScale.y),
+      1);
+
+    radiusIndicator.transform.localScale = scale;
+
+    layerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
+  }
+
+  public override void HitTarget(GameObject target) {
+    Collider2D[] collidersHit = Physics2D.OverlapCircleAll(transform.position, explosionRadius, layerMask);
+
+    foreach (Collider2D collider in collidersHit) {
+      Debug.Log(collider.name);
       if (collider.CompareTag(targetTag)) {
-        HitTarget(collider.gameObject);
+        collider.gameObject.SendMessage("GetDamage", damageAmount);
       }
+    }
+
+    if (target.CompareTag("Wall")) {
+      UiManager.Instance().MakeExplosion(transform.position, 12, Color.yellow, speedMultiplier: 0.5f);
     }
 
     Destroy(gameObject);

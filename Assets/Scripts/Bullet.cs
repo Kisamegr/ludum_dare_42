@@ -9,8 +9,15 @@ public class Bullet : MonoBehaviour {
 
   public BulletType bulletType = BulletType.Simple;
   public int damageAmount;
+  public float bulletSpeed;
   public float pushForce;
   public string targetTag;
+  public Color explosionColor;
+
+
+  public void Shoot() {
+    Shoot(bulletSpeed);
+  }
 
   public void Shoot(float bulletSpeed) {
     float bulletAngle = Mathf.Deg2Rad * transform.rotation.eulerAngles.z;
@@ -18,25 +25,25 @@ public class Bullet : MonoBehaviour {
     GetComponent<Rigidbody2D>().velocity = bulletDir * bulletSpeed;
   }
 
-  protected virtual void HitTarget(GameObject target) {
-    target.SendMessage("GetDamage", damageAmount);
-  }
-
-  protected virtual void OnTriggerEnter2D(Collider2D collision) {
+  public virtual void HitTarget(GameObject target) {
     //if simple type1 
-    if (collision.CompareTag(targetTag)) {
-      HitTarget(collision.gameObject);
+    if (target.CompareTag(targetTag)) {
+      target.SendMessage("GetDamage", damageAmount);
+
 
       //TODO - penetration powerup/skill
       if (true)
         Destroy(gameObject);
     }
 
-    if (collision.CompareTag("Wall")) {
+    if (target.CompareTag("Wall")) {
       UiManager.Instance().MakeExplosion(transform.position, 6, Color.blue, speedMultiplier: 0.5f);
       Destroy(gameObject);
     }
+  }
 
+  protected virtual void OnTriggerEnter2D(Collider2D collision) {
+    HitTarget(collision.gameObject);
   }
 
 }
