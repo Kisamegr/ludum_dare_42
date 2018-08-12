@@ -24,11 +24,15 @@ public class Enemy : MonoBehaviour {
   public Transform scorePickupPrefab;
   public int pickupsDropCount = 1;
   public GameObject pickupDropPrefab;
+  public float colorHitDamping = 0.2f;
+  public float colorHitWhite = 0.7f;
 
   private Player player;
   private Rigidbody2D _rigidbody;
   private float lastShootTime;
   private float currentHp;
+  private SpriteRenderer spriteRenderer;
+  private Color originalColor;
 
   #region Type4 vars
   private float rotateSpeed = 2f;
@@ -39,6 +43,8 @@ public class Enemy : MonoBehaviour {
   // Use this for initialization
   void Start() {
     player = GameObject.Find("Player").GetComponent<Player>();
+    spriteRenderer = GetComponent<SpriteRenderer>();
+    originalColor = spriteRenderer.color;
     _rigidbody = GetComponent<Rigidbody2D>();
     lastShootTime = Time.time;
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
@@ -63,6 +69,7 @@ public class Enemy : MonoBehaviour {
   // Update is called once per frame
   void Update() {
 
+    spriteRenderer.color = Color.Lerp(spriteRenderer.color, originalColor, Time.deltaTime / colorHitDamping);
     Vector2 moveDir = (player.transform.position - transform.position).normalized;
 
     switch (enemyType)
@@ -136,6 +143,8 @@ public class Enemy : MonoBehaviour {
     currentHp -= damageAmount;
     if (currentHp <= 0)
       Die();
+    else
+      spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.white, colorHitWhite);
     
   }
 
@@ -151,7 +160,7 @@ public class Enemy : MonoBehaviour {
       Vector3 offset = new Vector3(x, y, 0);
       Instantiate(scorePickupPrefab, transform.position + offset, Quaternion.identity);
     }
-    UiManager.Instance().MakeExplosion(transform.position, 30, GetComponent<SpriteRenderer>().color);
+    UiManager.Instance().MakeExplosion(transform.position, 30, spriteRenderer.color);
 
     if (pickupDropPrefab != null)
       Instantiate(pickupDropPrefab, transform.position, Quaternion.identity);
