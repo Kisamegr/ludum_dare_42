@@ -58,11 +58,12 @@ public class GAME : MonoBehaviour {
  
     wallParent = GameObject.Find("Walls").transform;
 
+    float showMargin = 2f;
     wallParent.GetComponent<PolygonCollider2D>().points = new Vector2[] {
-      new Vector2(-mapSize.x / 2, -mapSize.y / 2),
-      new Vector2(-mapSize.x / 2, mapSize.y / 2),
-      new Vector2(mapSize.x / 2, mapSize.y / 2),
-      new Vector2(mapSize.x / 2, -mapSize.y / 2) };
+      new Vector2(-mapSize.x / 2 - showMargin, -mapSize.y / 2 - showMargin),
+      new Vector2(-mapSize.x / 2 - showMargin, mapSize.y / 2 + showMargin),
+      new Vector2(mapSize.x / 2 + showMargin, mapSize.y / 2 + showMargin),
+      new Vector2(mapSize.x / 2 + showMargin, -mapSize.y / 2 - showMargin) };
 
     LoadNextLevel();
 

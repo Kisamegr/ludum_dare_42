@@ -11,8 +11,9 @@ public class UiManager : MonoBehaviour
   public TextMeshProUGUI scoreText;
   public TextMeshProUGUI gameoverText;
   public TextMeshProUGUI timeText;
-  public GameObject explosionPrefab;
-  public GameObject overtextPrefab;
+  public GameObject explosionPrefab; 
+
+  public GameObject LinePrefab;
 
   private GAME game;
   private static UiManager _instance; 
@@ -31,6 +32,36 @@ public class UiManager : MonoBehaviour
   void Start()
   {
     game = GAME.Instance();
+
+    CreateGrid();
+
+  }
+
+  void CreateGrid()
+  {
+    float W = GAME.Instance().mapSize.x / 2 + 5;
+    float H = GAME.Instance().mapSize.y / 2 + 5;
+
+    int noGrids = 20;
+
+    float w = 2 * W / noGrids;
+    float h = 2 * H / noGrids;
+
+    for (int i = 0; i < noGrids; i++)
+    {
+      GameObject lrGO = Instantiate(LinePrefab);
+      LineRenderer lr = lrGO.GetComponent<LineRenderer>();
+      lr.SetPositions(new Vector3[] { new Vector3(-W, -H + i * h, 0), new Vector3(W, -H + i * h, 0) });
+    }
+
+    for (int i = 0; i < noGrids; i++)
+    {
+      GameObject lrGO = Instantiate(LinePrefab);
+      LineRenderer lr = lrGO.GetComponent<LineRenderer>();
+      lr.SetPositions(new Vector3[] { new Vector3(-W + i*w , -H, 0), new Vector3(-W + i * w, H, 0) });
+    }
+
+
   }
 
   // Update is called once per frame

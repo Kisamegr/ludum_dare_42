@@ -87,10 +87,11 @@ public class Pickup: MonoBehaviour {
     {
       Player player = GameObject.Find("Player").GetComponent<Player>();
 
+      GAME.Instance().IncreaseScore(score);
       switch (type)
       {
         case PickupType.Score:
-          GAME.Instance().IncreaseScore(score);
+          //GAME.Instance().IncreaseScore(score);
           break;
         case PickupType.IncreaseBulletSpeed:
           player.IncreaseBulletPower();
