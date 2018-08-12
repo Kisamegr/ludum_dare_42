@@ -8,7 +8,7 @@ public enum BulletType { Simple };
 public class Bullet : MonoBehaviour {
 
   public BulletType bulletType = BulletType.Simple;
-  public int damageAmount;
+  public float damageAmount;
   public float pushForce;
   public string targetTag;
 
@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour {
     }
 
     if (collision.CompareTag("Wall")) {
-      UiManager.Instance().MakeExplosion(transform.position, 6, Color.blue, speedMultiplier: 0.5f);
+      UiManager.Instance().MakeExplosion(transform.position, 6, GetComponent<SpriteRenderer>().color, speedMultiplier: 0.5f);
       Destroy(gameObject);
     }
 

@@ -12,10 +12,10 @@ public class UiManager : MonoBehaviour
   public TextMeshProUGUI gameoverText;
   public TextMeshProUGUI timeText;
   public GameObject explosionPrefab;
+  public GameObject overtextPrefab;
 
   private GAME game;
-
-  private static UiManager _instance;
+  private static UiManager _instance; 
 
   public static UiManager Instance()
   {
@@ -24,7 +24,7 @@ public class UiManager : MonoBehaviour
 
   private void Awake()
   {
-    _instance = this;
+    _instance = this; 
   }
 
   // Use this for initialization
@@ -41,7 +41,8 @@ public class UiManager : MonoBehaviour
       : "Level -";
 
     UpdateTimeText();
-}
+  }
+  
 
   public void NextLevel(float duration)
   {

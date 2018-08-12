@@ -5,18 +5,28 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour {
-
-  public float maxSpeed;
+   
   public float speedDamping = 0.12f;
-  public GameObject primaryBulletPrefab;
-  public float shootInterval = 0.1f;
-  public float bulletSpeed = 10f;
+  public GameObject primaryBulletPrefab; 
   public Status currentStatus;
   public SpecialWeaponObject specialWeapon;
+  public PlayerLevelsObject playerLevels;
 
   private float lastShootTime = 0;
   private float lastSpecialShootTime = 0;
   private Transform bulletSpawnOffset;
+
+
+  private int currentSpeedLevel = 0;
+  private float maxSpeed;
+
+  private int currentBulletSpeedLevel = 0;
+  private float bulletSpeed;
+  private float shootInterval;
+
+  private int currentBulletPowerLevel = 0;
+  private float bulletDamage;
+  private float bulletSize;
 
   Rigidbody2D body;
 
@@ -40,10 +50,16 @@ public class Player : MonoBehaviour {
     body = GetComponent<Rigidbody2D>();
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
     _GAME = GAME.Instance();
+
+    maxSpeed = playerLevels.playerSpeedLevels[0];
+    bulletDamage = playerLevels.bulletDamageLevels[0];
+    bulletSize = playerLevels.bulletSizeLevels[0];
+    bulletSpeed = playerLevels.bulletSpeedLevels[0];
+    shootInterval = playerLevels.bulletShootIntervalLevels[0];
   }
 
-  // Update is called once per frame
-  void Update() {
+// Update is called once per frame
+void Update() {
     if (!HasStatus(Status.Rooted))
       Move();
     Rotate();
@@ -68,9 +84,11 @@ public class Player : MonoBehaviour {
 
   void PrimaryShoot() {
     if (Input.GetAxis("Fire1") > 0 && Time.time - lastShootTime > shootInterval) {
-      float damageAmount = 5f; //TODO: make it a class variable
       Bullet bullet = CreateBullet(primaryBulletPrefab);
-      bullet.Shoot(bulletSpeed);
+      bullet.damageAmount = bulletDamage;
+      bullet.transform.localScale = new Vector3(bulletSize, bulletSize, 1);
+      
+      bullet.Shoot(playerLevels.bulletSpeedLevels[currentBulletSpeedLevel]);
 
       lastShootTime = Time.time;
     }
@@ -80,6 +98,30 @@ public class Player : MonoBehaviour {
   private Bullet CreateBullet(GameObject bulletPrefab) {
     return Instantiate(bulletPrefab, position: bulletSpawnOffset.position, rotation: transform.rotation).GetComponent<Bullet>();
   }
+
+  public void IncreaseBulletPower()
+  {
+    currentBulletPowerLevel += 1;
+    currentBulletPowerLevel = Mathf.Min(currentBulletPowerLevel, playerLevels.bulletDamageLevels.Length);
+    bulletDamage = playerLevels.bulletDamageLevels[currentBulletPowerLevel];
+    bulletSize = playerLevels.bulletSizeLevels[currentBulletPowerLevel]; 
+  }
+
+  public void IncreaseBulletSpeed()
+  {
+    currentBulletSpeedLevel += 1;  
+    currentBulletSpeedLevel = Mathf.Min(currentBulletSpeedLevel, playerLevels.bulletSpeedLevels.Length);
+    bulletSpeed = playerLevels.bulletSpeedLevels[currentBulletSpeedLevel];
+    shootInterval = playerLevels.bulletShootIntervalLevels[currentBulletSpeedLevel];
+  }
+
+  public void IncreasePlayerSpeed()
+  {
+    currentSpeedLevel += 1;  
+    currentSpeedLevel = Mathf.Min(currentSpeedLevel, playerLevels.playerSpeedLevels.Length);
+    maxSpeed = playerLevels.playerSpeedLevels[currentSpeedLevel]; 
+  }
+
 
   void SpecialShoot() {
     if (specialWeapon != null) {
@@ -92,7 +134,7 @@ public class Player : MonoBehaviour {
             break;
           case SpecialWeaponObject.WeaponType.Rocket:
             RocketBullet rocket = (RocketBullet) CreateBullet(specialWeapon.bullet);
-            rocket.Shoot(bulletSpeed/2);
+            rocket.Shoot(10/2); //TODO have a rocket speed variable
             break;
           case SpecialWeaponObject.WeaponType.Homing:
             break;
