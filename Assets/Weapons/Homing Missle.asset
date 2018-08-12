@@ -13,7 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpecialWeaponObject
   weaponName: 'Homing Missle '
   type: 2
-  cooldown: 0.5
-  ammo: 100
+  cooldown: 1
+  ammo: 3
   bullet: {fileID: 1976492469154558, guid: 0cecffcd9de3d20419025b0fd69a0534, type: 2}
   hasSecondActivation: 0
+  count: 5

@@ -8,7 +8,7 @@ using UnityEngine;
 /// Type2: Push on collision
 /// Type3: Turret
 /// </summary>
-public enum EnemyType { Type1, Type2, Type3 };
+public enum EnemyType { Type1, Type2, Type3, Type4, Type5, Type6 };
 
 
 public class Enemy : MonoBehaviour {
@@ -30,6 +30,12 @@ public class Enemy : MonoBehaviour {
   private float lastShootTime;
   private float currentHp;
 
+  #region Type4 vars
+  private float rotateSpeed = 2f;
+  private Vector3 pivotPoint;
+  #endregion
+
+
   // Use this for initialization
   void Start() {
     player = GameObject.Find("Player").GetComponent<Player>();
@@ -37,6 +43,21 @@ public class Enemy : MonoBehaviour {
     lastShootTime = Time.time;
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
     currentHp = hp;
+
+    if(enemyType == EnemyType.Type4)
+    {
+      _rigidbody.angularVelocity = 700f;
+
+      if (Random.value < 0.5)
+      {
+        rotateSpeed *= -1;
+         _rigidbody.angularVelocity *= -1f;
+        
+      }
+      float distFromCenter = Random.value;
+      pivotPoint = distFromCenter * transform.position;
+      pivotPoint.z = transform.position.z;
+    }
   }
 
   // Update is called once per frame
@@ -54,15 +75,22 @@ public class Enemy : MonoBehaviour {
         break;
       case EnemyType.Type3:
         //Extrapolate maybe to predict future movement (+ noise)
-        transform.rotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, moveDir));
+        float angle = Vector2.SignedAngle(Vector2.right, moveDir);
+        transform.rotation = Quaternion.Euler(0, 0, angle);
         Shoot();
+        break;
+      case EnemyType.Type4: 
+        transform.RotateAround(pivotPoint, new Vector3(0, 0, 1), rotateSpeed);
         break;
     }
     
   }
 
-  public void OnCollisionEnter2D(Collision2D collision) {
-    if (collision.collider.CompareTag(player.tag)) {
+  public void OnCollisionEnter2D(Collision2D collision)
+  {
+    if (collision.collider.CompareTag(player.tag))
+    {
+          player.GetPushed(meleeDamage);
 
       if(player.HasStatus(Player.Status.Invunerable)) {
         GetDamage(player.invunerableDamage);
@@ -83,10 +111,16 @@ public class Enemy : MonoBehaviour {
         }
       }
     }
+
+    if (collision.collider.CompareTag("Wall"))
+    {
+      rotateSpeed *= -1f;
+      _rigidbody.angularVelocity *= -1;
+    }
   }
 
 
-  public void Shoot()
+    public void Shoot()
   {
     if (Time.time - lastShootTime > shootInterval)
     {

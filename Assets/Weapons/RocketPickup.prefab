@@ -72,7 +72,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1519791098045714}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.7, y: 0.0033161463, z: -0.13018285}
+  m_LocalPosition: {x: 2.421401, y: 1.5431961, z: -0.13018285}
   m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_Children:
   - {fileID: 224912995688664856}
@@ -157,9 +157,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 5
-  lifetime: 4
+  lifetime: 10
   score: 10
-  flickerDuration: 2
+  flickerDuration: 5
   magnetRadius: 2
   magneticForce: 400
   scriptableObject: {fileID: 11400000, guid: d356b34993a24804fb91102e59df8355, type: 2}
@@ -399,6 +399,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 4.64}
+  m_AnchoredPosition: {x: 0, y: 2.7}
   m_SizeDelta: {x: 2.63, y: 0.25}
   m_Pivot: {x: 0.5, y: 0.5}

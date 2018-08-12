@@ -100,11 +100,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  lifetime: 4
-  score: 10
+  lifetime: 10
+  score: 50
   flickerDuration: 2
   magnetRadius: 2
   magneticForce: 400
+  scriptableObject: {fileID: 0}
 --- !u!212 &212290088202865636
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -135,12 +135,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772b8add22349004f81146d83235bbb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  lifetime: 60
+  type: 3
+  lifetime: 10
   score: 50
   flickerDuration: 5
   magnetRadius: 2
   magneticForce: 400
+  scriptableObject: {fileID: 0}
 --- !u!114 &114065093312743776
 MonoBehaviour:
   m_ObjectHideFlags: 1

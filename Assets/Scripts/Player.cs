@@ -142,11 +142,16 @@ void Update() {
   }
 
 
-  void SpecialShoot() {
+  void SpecialShoot()
+  {
+    if(Input.GetMouseButtonDown(1)){
+      Debug.Log("special shoot 1 ");
+    }
+
     if (specialWeapon != null) {
 
       if (Input.GetMouseButtonDown(1)) {
-
+        Debug.Log("special shoot 2 ");
         if (specialWeapon.hasSecondActivation && currentSpecialBullet != null) {
           currentSpecialBullet.HitTarget(currentSpecialBullet.gameObject);
         }
