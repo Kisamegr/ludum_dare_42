@@ -25,14 +25,14 @@ public class Enemy : MonoBehaviour {
   public Transform scorePickupPrefab;
   public int pickupsDropCount = 1;
 
-  private TopDownCharacterController player;
+  private Player player;
   private Rigidbody2D _rigidbody;
   private float lastShootTime;
   private int currentHp;
 
   // Use this for initialization
   void Start() {
-    player = GameObject.Find("Player").GetComponent<TopDownCharacterController>();
+    player = GameObject.Find("Player").GetComponent<Player>();
     _rigidbody = GetComponent<Rigidbody2D>();
     lastShootTime = Time.time;
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
@@ -96,11 +96,12 @@ public class Enemy : MonoBehaviour {
     currentHp -= damageAmount;
     if (currentHp <= 0)
       Die();
+    
   }
 
   public void Die() {
-    TopDownGame.Instance().EnemyDied();
-    TopDownGame.Instance().ChangeWallBorders(true, 5);
+    GAME.Instance().EnemyDied();
+    GAME.Instance().ChangeWallBorders(true, 5);
     Destroy(gameObject);
 
     float pickupSize = scorePickupPrefab.GetComponent<SpriteRenderer>().bounds.size.x;
@@ -111,6 +112,7 @@ public class Enemy : MonoBehaviour {
       Vector3 offset = new Vector3(x, y, 0);
       Instantiate(scorePickupPrefab, transform.position + offset, Quaternion.identity);
     }
+    UiManager.Instance().MakeExplosion(transform.position, 30, GetComponent<SpriteRenderer>().color);
 
   }
 

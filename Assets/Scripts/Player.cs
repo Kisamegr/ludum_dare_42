@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class TopDownCharacterController : MonoBehaviour {
+public class Player : MonoBehaviour {
 
   public float maxSpeed;
   public float speedDamping = 0.12f;
@@ -25,7 +25,7 @@ public class TopDownCharacterController : MonoBehaviour {
 
   private float invunerableDuration = 0;
   private float invunerableStartTime = 0;
-  private TopDownGame _GAME;
+  private GAME _GAME;
 
   private int currentAmmo = 100;
 
@@ -39,7 +39,7 @@ public class TopDownCharacterController : MonoBehaviour {
   void Start() {
     body = GetComponent<Rigidbody2D>();
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
-    _GAME = TopDownGame.Instance();
+    _GAME = GAME.Instance();
   }
 
   // Update is called once per frame

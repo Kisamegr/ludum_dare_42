@@ -27,12 +27,13 @@ public class Bullet : MonoBehaviour {
     if (collision.CompareTag(targetTag)) {
       HitTarget(collision.gameObject);
 
-      //TODO - check for extra skill
+      //TODO - penetration powerup/skill
       if (true)
         Destroy(gameObject);
     }
 
-    if (collision.CompareTag("Wall")) { 
+    if (collision.CompareTag("Wall")) {
+      UiManager.Instance().MakeExplosion(transform.position, 6, Color.blue, speedMultiplier: 0.5f);
       Destroy(gameObject);
     }
 
