@@ -1169,6 +1169,12 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114752605402074082, guid: 4a0c851febb47f7439a3ca71d87c6800,
+        type: 2}
+      propertyPath: playerLevels
+      value: 
+      objectReference: {fileID: 11400000, guid: 0b3b56722f4729d49bce8c4c6e9b7942,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0c851febb47f7439a3ca71d87c6800, type: 2}
   m_IsPrefabAsset: 0
@@ -1240,6 +1246,7 @@ MonoBehaviour:
   timeText: {fileID: 1828974096}
   explosionPrefab: {fileID: 1899439299032290, guid: c6eaea48e0bdfff469aeb40d5a34e283,
     type: 2}
+  overtextPrefab: {fileID: 0}
 --- !u!1 &1494695206
 GameObject:
   m_ObjectHideFlags: 0
