@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour {
   public EnemyType enemyType = EnemyType.Type1;
   public float moveSpeed = 5f;
   public int meleeDamage = 1;
-  public int hp = 1;
+  public float hp = 1;
   //Only if type 3
   public float shootInterval = 0.2f;
   public GameObject bulletPrefab;
@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour {
   private Player player;
   private Rigidbody2D _rigidbody;
   private float lastShootTime;
-  private int currentHp;
+  private float currentHp;
 
   // Use this for initialization
   void Start() {

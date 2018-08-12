@@ -1,9 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScorePickup : MonoBehaviour {
 
+[Flags]
+public enum PickupType
+{
+  Score = 0,
+  IncreasePlayerSpeed = 1,
+  IncreaseBulletSpeed = 2,
+  IncreaseBulletPower = 3,
+  SecondaryWeapon,
+  SpecialSkill
+}
+
+
+public class Pickup: MonoBehaviour {
+
+
+  public PickupType type = PickupType.Score;
   public float lifetime = 10f;
   public int score = 10;
   public float flickerDuration = 3f;
@@ -28,7 +44,10 @@ public class ScorePickup : MonoBehaviour {
   {
     _rigidbody = GetComponent<Rigidbody2D>();
     playerTrans = GameObject.Find("Player").transform;
-    _rigidbody.AddTorque((Random.value - 0.5f) * 500);
+
+    if(type == PickupType.Score)
+      _rigidbody.AddTorque((UnityEngine.Random.value - 0.5f) * 300);
+    
   }
 
   private void Update()
@@ -36,7 +55,7 @@ public class ScorePickup : MonoBehaviour {
     if(Time.time - creationTime > lifetime - flickerDuration)
     {
       float t = (Time.time - (creationTime + lifetime - flickerDuration)) / flickerDuration;
-      float r = Random.value;
+      float r = UnityEngine.Random.value;
       
       Color c = _spriteRenderer.color;
       c.a = r < t ? 0 : 1;
@@ -66,7 +85,25 @@ public class ScorePickup : MonoBehaviour {
   { 
     if (collision.gameObject.CompareTag("Player"))
     {
-      GAME.Instance().IncreaseScore(score);
+      Player player = GameObject.Find("Player").GetComponent<Player>();
+
+      switch (type)
+      {
+        case PickupType.Score:
+          GAME.Instance().IncreaseScore(score);
+          break;
+        case PickupType.IncreaseBulletSpeed:
+          player.IncreaseBulletPower();
+          break;
+        case PickupType.IncreaseBulletPower:
+          player.IncreaseBulletPower();
+          break;
+        case PickupType.IncreasePlayerSpeed:
+          player.IncreasePlayerSpeed();
+          break;
+        default:
+          break;
+      }
       Disappear();
     }
   }
