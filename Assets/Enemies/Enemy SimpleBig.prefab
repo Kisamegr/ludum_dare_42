@@ -112,6 +112,7 @@ MonoBehaviour:
   pickupDropPrefab: {fileID: 0}
   colorHitDamping: 0.2
   colorHitWhite: 0.7
+  wallPushAmount: 1.5
 --- !u!212 &212155643223238364
 SpriteRenderer:
   m_ObjectHideFlags: 1

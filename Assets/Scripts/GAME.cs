@@ -8,7 +8,12 @@ public class GAME : MonoBehaviour {
   public float countdownTimer = 3;
   public float waveCountdownTimer = 1;
   public bool wallsClosing = true;
+
+  public Vector2 initialMapSize = new Vector2(25, 25);
+  public Vector2 minMapSize = new Vector2(20, 20);
   public Vector2 mapSize = new Vector2(20, 20);
+  public float reducePerLevel = 0.4f;
+  
   public float wallThickness = 10; 
   public float wallSpeed = 0.5f;
   public float wallLerpSpeed = 1;
@@ -54,6 +59,8 @@ public class GAME : MonoBehaviour {
 
   private void Awake() {
     _instance = this;
+    mapSize.x = initialMapSize.x;
+    mapSize.y = initialMapSize.y;
   }
   // Use this for initialization
   void Start() {
@@ -98,11 +105,9 @@ public class GAME : MonoBehaviour {
 
       Enemy[] enemies = GameObject.FindObjectsOfType<Enemy>();
       if ((Time.time - lastLevelLoadTime) > countdownTimer && enemies.Length == 0)
-      {
-        ResetWalls();
+      { 
         if (remainingSpawnEvents.Count == 0) {
-          UiManager.Instance().NextLevel(countdownTimer);
-          lastLevelLoadTime = Time.time;
+          EndLevel();
         }
         else if (!startedNextWave) {
           Invoke("NextWaveSpawn", currentWave == 0 ? 0 : waveCountdownTimer);
@@ -116,6 +121,22 @@ public class GAME : MonoBehaviour {
     {
       GameOver();
     }
+  }
+
+  public void EndLevel()
+  {
+    mapSize.x -= reducePerLevel;
+    if(mapSize.x < minMapSize.x)
+      mapSize.x = minMapSize.x;
+  
+    mapSize.y -= reducePerLevel;
+    if (mapSize.y < minMapSize.y)
+      mapSize.y = minMapSize.y;
+
+
+    ResetWalls();
+    UiManager.Instance().NextLevel(countdownTimer);
+    lastLevelLoadTime = Time.time;    
   }
 
   public void GameOver()
@@ -240,11 +261,11 @@ public class GAME : MonoBehaviour {
   }
 
   public void LoadNextLevel() {
-
-    ResetWalls();
+     
     remainingSpawnEvents.Clear();
     currentWave = 0;
 
+    //Generate new level - increase power
     if(CurrentLevel == levels.Count)
     {
       int nextLvl = (levels.Count - 1) - 2; 
@@ -252,9 +273,16 @@ public class GAME : MonoBehaviour {
       Debug.Log(newLevel.name);
       foreach (var spawnEvent in newLevel.enemySpawnEvents)
       {
-        for(int i=0;i < spawnEvent.enemySpawns.Length; i++)
+        for (int i = 0; i < spawnEvent.enemySpawns.Length; i++)
         {
-          spawnEvent.enemySpawns[i].count += 2;
+          if (spawnEvent.enemySpawns[i].enemy.GetComponent<Enemy>().enemyType == EnemyType.Wall)
+          {
+            spawnEvent.enemySpawns[i].count += 1;
+          }
+          else
+          {
+            spawnEvent.enemySpawns[i].count += 2;
+          }
         }
       }
       levels.Add(newLevel);
@@ -272,8 +300,9 @@ public class GAME : MonoBehaviour {
 
     Rect mapSize = CurrentMapSize();
 
-    float safeDist = 5;
+    float safeDist = 7;
     Rect safeArea = new Rect(player.transform.position.x - safeDist, player.transform.position.y - safeDist, safeDist, safeDist);
+    int maxTries = 3;
 
     foreach (EnemySpawn spawn in spawnEvent.enemySpawns) {
       for (int i = 0; i<spawn.count; i++) {
@@ -281,12 +310,14 @@ public class GAME : MonoBehaviour {
           Random.Range(mapSize.xMin, mapSize.xMax),
           Random.Range(mapSize.yMin, mapSize.yMax),
           0);
-        while(safeArea.Contains(position))
+        int tries = 0;
+        while(safeArea.Contains(position) && tries < maxTries)
         {
           position = new Vector3(
           Random.Range(mapSize.xMin, mapSize.xMax),
           Random.Range(mapSize.yMin, mapSize.yMax),
           0);
+          tries += 1;
         }
 
         Enemy enemy = Instantiate(spawn.enemy, position, Quaternion.identity).GetComponent<Enemy>();

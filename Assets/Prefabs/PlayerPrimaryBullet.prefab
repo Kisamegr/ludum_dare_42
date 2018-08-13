@@ -106,7 +106,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 23
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -201,6 +201,7 @@ MonoBehaviour:
   pushForce: 1
   targetTag: Enemy
   explosionColor: {r: 0, g: 0, b: 0, a: 0}
+  CanPenetrate: 0
 --- !u!212 &212612874533662692
 SpriteRenderer:
   m_ObjectHideFlags: 1

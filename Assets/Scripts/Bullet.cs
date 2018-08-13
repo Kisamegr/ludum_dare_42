@@ -13,6 +13,7 @@ public class Bullet : MonoBehaviour {
   public float pushForce;
   public string targetTag;
   public Color explosionColor;
+  public bool CanPenetrate = false;
 
   protected Rigidbody2D body;
 
@@ -34,8 +35,11 @@ public class Bullet : MonoBehaviour {
     //if simple type1 
     if (target.CompareTag(targetTag)) {
       target.SendMessage("GetDamage", damageAmount);
-      PlayDestroySound();
-      Destroy(gameObject);
+      if (!CanPenetrate)
+      {
+        PlayDestroySound();
+        Destroy(gameObject);
+      }
     }
 
     if (target.CompareTag("Wall")) {

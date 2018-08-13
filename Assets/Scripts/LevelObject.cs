@@ -11,7 +11,25 @@ public class LevelObject : ScriptableObject, ICloneable {
 
   public object Clone()
   {
-    return this.MemberwiseClone();
+    LevelObject newLevel = new LevelObject();
+    newLevel.enemySpawnEvents = new EnemySpawnEvent[this.enemySpawnEvents.Length];
+
+    for (int i = 0; i < enemySpawnEvents.Length; i++)
+    {
+      var oldSpawnEvent = this.enemySpawnEvents[i];
+      EnemySpawnEvent newSpawnEvent = new EnemySpawnEvent();
+      newSpawnEvent.enemySpawns = new EnemySpawn[oldSpawnEvent.enemySpawns.Length];
+
+      for (int j = 0; j < oldSpawnEvent.enemySpawns.Length; j++)
+      {
+        newSpawnEvent.enemySpawns[j].enemy = oldSpawnEvent.enemySpawns[j].enemy;
+        newSpawnEvent.enemySpawns[j].count = oldSpawnEvent.enemySpawns[j].count;
+      }
+
+      newLevel.enemySpawnEvents[i] = newSpawnEvent;
+    }
+    return newLevel;
+    //return this.MemberwiseClone();
   }
 }
 

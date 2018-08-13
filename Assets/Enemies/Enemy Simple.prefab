@@ -103,7 +103,7 @@ MonoBehaviour:
   moveSpeed: 5
   meleeDamage: 1
   hp: 1
-  shootInterval: 5
+  shootInterval: 0
   bulletPrefab: {fileID: 0}
   bulletSpawnOffset: {fileID: 0}
   scorePickupPrefab: {fileID: 4033669490232630, guid: 76bffbd026b393041b4af6f922e94098,
@@ -112,6 +112,7 @@ MonoBehaviour:
   pickupDropPrefab: {fileID: 0}
   colorHitDamping: 0.2
   colorHitWhite: 0.7
+  wallPushAmount: 0.5
 --- !u!212 &212934703532480326
 SpriteRenderer:
   m_ObjectHideFlags: 1
