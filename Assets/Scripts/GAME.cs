@@ -90,9 +90,9 @@ public class GAME : MonoBehaviour {
   // Update is called once per frame
   void Update() {
 
-    if (isGameover)
-      if (Input.anyKeyDown)
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    //if (isGameover)
+    //  if (Input.anyKeyDown)
+    //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
     if (!isGameover)
     {
@@ -143,6 +143,10 @@ public class GAME : MonoBehaviour {
   {
     isGameover = true;
     ui_manager.GameOver();
+  }
+
+  public bool IsGameOver() {
+    return isGameover;
   }
 
   public void IncreaseScore(int increaseAmount)
