@@ -11,12 +11,19 @@ public class Menu : MonoBehaviour {
   }
 
   public void OnCreditsClicked() {
-    Debug.Log("SJOWOWOWOW");
     uiAnimator.SetTrigger("showCredits");
   }
 
-  public void OnBackClicked() {
+  public void OnCreditsBackClicked() {
     uiAnimator.SetTrigger("hideCredits");
+  }
+
+  public void OnHowToClicked() {
+    uiAnimator.SetTrigger("showHow");
+  }
+
+  public void OnHowToBackClicked() {
+    uiAnimator.SetTrigger("hideHow");
   }
 
 }
