@@ -25,7 +25,7 @@ public class Pickup: MonoBehaviour {
   public float flickerDuration = 3f;
   public float magnetRadius = 1f;
   public float magneticForce = 10;
-  public ScriptableObject scriptableObject;
+  public SpecialWeaponObject weapon;
 
   private float creationTime;
   private Rigidbody2D _rigidbody;
@@ -106,7 +106,7 @@ public class Pickup: MonoBehaviour {
           player.IncreasePlayerSpeed();
           break;
         case PickupType.SpecialSkill:
-          player.SetSpecialWeapon((SpecialWeaponObject) scriptableObject);
+          player.SetSpecialWeapon(weapon);
           break;
         default:
           break;

@@ -141,7 +141,14 @@ MonoBehaviour:
   flickerDuration: 5
   magnetRadius: 2
   magneticForce: 400
-  scriptableObject: {fileID: 11400000, guid: a0ba9fa38b45f424780d6bb78f77e182, type: 2}
+  weapon:
+    weaponName: Homing Missle
+    type: 2
+    cooldown: 1
+    ammo: 3
+    bullet: {fileID: 1976492469154558, guid: 0cecffcd9de3d20419025b0fd69a0534, type: 2}
+    hasSecondActivation: 0
+    count: 5
 --- !u!114 &114200399551797704
 MonoBehaviour:
   m_ObjectHideFlags: 1

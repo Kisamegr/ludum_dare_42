@@ -291,7 +291,14 @@ MonoBehaviour:
   flickerDuration: 5
   magnetRadius: 2
   magneticForce: 400
-  scriptableObject: {fileID: 11400000, guid: 08be7ef23cd7826419f7c1ba0302485a, type: 2}
+  weapon:
+    weaponName: Dash
+    type: 0
+    cooldown: 1
+    ammo: 5
+    bullet: {fileID: 1811713034693654}
+    hasSecondActivation: 0
+    count: 1
 --- !u!212 &212799514862274860
 SpriteRenderer:
   m_ObjectHideFlags: 1

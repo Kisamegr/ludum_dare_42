@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Special Weapon", menuName = "Special Weapon")]
-public class SpecialWeaponObject : ScriptableObject {
+//[CreateAssetMenu(fileName = "New Special Weapon", menuName = "Special Weapon")]
+[Serializable]
+public class SpecialWeaponObject {
 
   public enum WeaponType {
     Dash, Rocket, Homing
