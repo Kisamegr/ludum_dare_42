@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UiManager : MonoBehaviour
 {
 
+  public float scoreSizeDamping = 0.2f;
+  public float scoreSizeMaxScale = 2;
   public TextMeshProUGUI levelText;
   public TextMeshProUGUI scoreText;
-  public TextMeshProUGUI gameoverText;
+  public GameObject gameOverPanel;
   public TextMeshProUGUI timeText;
   public GameObject explosionPrefab;
   public TextMeshProUGUI countdownText;
@@ -21,6 +24,7 @@ public class UiManager : MonoBehaviour
   public GameObject weaponUiPrefab;
 
 
+
   private GAME game;
   private static UiManager _instance;
 
@@ -28,6 +32,8 @@ public class UiManager : MonoBehaviour
   private float countdownLeft = 0;
 
   private Queue<Image> weaponUiImages;
+
+  private Vector3 originalScoreScale;
 
   public static UiManager Instance()
   {
@@ -41,11 +47,13 @@ public class UiManager : MonoBehaviour
 
   private int prevSec;
 
+
   // Use this for initialization
   void Start()
   {
     game = GAME.Instance();
     weaponUiImages = new Queue<Image>();
+    originalScoreScale = scoreText.transform.localScale;
 
     CreateGrid();
 
@@ -88,7 +96,8 @@ public class UiManager : MonoBehaviour
       ? "Level " + game.CurrentLevel
       : "Level -";
 
-    UpdateTimeText();
+    if(!GAME.Instance().IsGameOver())
+      UpdateTimeText();
 
     if(countdownPlaying) {
       countdownText.text = Mathf.CeilToInt(countdownLeft).ToString();
@@ -113,7 +122,12 @@ public class UiManager : MonoBehaviour
         } 
         GAME.Instance().LoadNextLevel();
       }
+
     }
+    scoreText.transform.localScale = Vector3.Lerp(
+      scoreText.transform.localScale,
+      originalScoreScale,
+      Time.deltaTime / scoreSizeDamping);
   }
   
 
@@ -141,12 +155,13 @@ public class UiManager : MonoBehaviour
 
     _timeText += secs + "." + mils;
 
-    timeText.text = _timeText;
+    timeText.text = "Time: " + _timeText;
   }
 
   public void UpdateScore(int score)
   {
-    scoreText.text = "Score: " + score;
+    scoreText.text = /*"Score: " +*/ score.ToString();
+    scoreText.transform.localScale = originalScoreScale * scoreSizeMaxScale;
   }
 
   public void GameOver()
@@ -158,7 +173,15 @@ public class UiManager : MonoBehaviour
     //transform.GetChild(0).GetComponents<AudioSource>()[0].clip = transform.GetChild(0).GetComponents<AudioSource>()[3].clip;
     //transform.GetChild(0).GetComponents<AudioSource>()[0].Play();
 
-    gameoverText.gameObject.SetActive(true);
+    gameOverPanel.SetActive(true);
+  }
+
+  public void OnRestartClicked() {
+    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+  }
+
+  public void OnMenuClicked() {
+    SceneManager.LoadScene("Menu");
   }
 
   public void FadeIn(float duration)
