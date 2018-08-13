@@ -120,9 +120,6 @@ void Update() {
         bullet.damageAmount = bulletDamage; 
         bullet.Shoot(bulletSpeed);
       }
-
-       //GetComponent<AudioSource>().Play();
-
       lastShootTime = Time.time;
     }
 
@@ -251,11 +248,17 @@ void Update() {
     if ((status & Status.Dashing) == Status.Dashing) {
       dashDuration = timeAmount;
       dashStartTime = Time.time;
+
+      GetComponent<TrailRenderer>().enabled = true;
+      transform.Find("Shield").gameObject.SetActive(true);
     }
 
     if ((status & Status.AfterDashing) == Status.AfterDashing) {
       afterDashDuration = timeAmount;
       afterDashStartTime = Time.time;
+
+      GetComponent<TrailRenderer>().enabled = false;
+      transform.Find("Shield").gameObject.SetActive(false);
     }
 
     if ((status & Status.Invunerable) == Status.Invunerable) {
@@ -263,6 +266,7 @@ void Update() {
       invunerableStartTime = Time.time;
     }
 
+    currentStatus = currentStatus | status;
     currentStatus = currentStatus | status;
   }
 
@@ -274,6 +278,7 @@ void Update() {
     invunerableDuration = 0;
     invunerableStartTime = 0;
     currentStatus = Status.None;
+
   }
   public bool HasStatus(Status status) {
     return (currentStatus & status) == status;

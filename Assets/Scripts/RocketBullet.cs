@@ -28,7 +28,7 @@ public class RocketBullet : Bullet {
         collider.gameObject.SendMessage("GetDamage", damageAmount);
       }
     }
-    UiManager.Instance().MakeExplosion(transform.position, 25, Color.yellow, speedMultiplier: 1f);
+    UiManager.Instance().MakeExplosion(transform.position, 200, Color.yellow, speedMultiplier: 4f);
     Destroy(gameObject);
   }
 

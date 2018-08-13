@@ -37,8 +37,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1976492469154558}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.35000002, y: 1.0999999, z: -0.13018285}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalPosition: {x: 3.9919229, y: -1.3254066, z: -0.13018285}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -100,9 +100,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletType: 0
-  bulletSpeed: 10
+  bulletSpeed: 13
   damageAmount: 5
-  pushForce: 2
+  pushForce: 3
   targetTag: Enemy
   explosionColor: {r: 0, g: 0, b: 0, a: 0}
   targetChooseDelay: 0.5

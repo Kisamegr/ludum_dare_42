@@ -67,7 +67,7 @@ Transform:
   m_GameObject: {fileID: 1679440652384720}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.35, y: 1.1, z: -0.13018285}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4225505265395316}
   m_Father: {fileID: 0}
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletType: 0
-  bulletSpeed: 4
+  bulletSpeed: 8
   damageAmount: 5
   pushForce: 5
   targetTag: Enemy
