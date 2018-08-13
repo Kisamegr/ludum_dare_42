@@ -28,11 +28,7 @@ public class RocketBullet : Bullet {
         collider.gameObject.SendMessage("GetDamage", damageAmount);
       }
     }
-
-    if (target.CompareTag("Wall")) {
-      UiManager.Instance().MakeExplosion(transform.position, 12, Color.yellow, speedMultiplier: 0.5f);
-    }
-
+    UiManager.Instance().MakeExplosion(transform.position, 25, Color.yellow, speedMultiplier: 1f);
     Destroy(gameObject);
   }
 

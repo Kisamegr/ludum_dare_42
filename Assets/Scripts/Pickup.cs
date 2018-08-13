@@ -79,6 +79,11 @@ public class Pickup: MonoBehaviour {
 
   private void Disappear()
   {
+    if(GetComponent<AudioSource>() != null)
+    {
+      PlayPickupSound();
+    }
+
     Destroy(gameObject);
   }
 
@@ -92,6 +97,7 @@ public class Pickup: MonoBehaviour {
       switch (type)
       {
         case PickupType.Score:
+
           //GAME.Instance().IncreaseScore(score);
           break;
         case PickupType.IncreaseBulletSpeed:
@@ -112,7 +118,21 @@ public class Pickup: MonoBehaviour {
       Disappear();
     }
   }
-   
+
+  private void PlayPickupSound()
+  {
+    GameObject g = new GameObject();
+    AudioSource otherAudioSource = g.AddComponent<AudioSource>();
+    AudioSource thisAudioSource = GetComponent<AudioSource>();
+
+    otherAudioSource.clip = thisAudioSource.clip;
+    otherAudioSource.volume = thisAudioSource.volume;
+    otherAudioSource.pitch = thisAudioSource.pitch;
+    otherAudioSource.Play();
+
+    Destroy(otherAudioSource, 2f);
+
+  }
 
 
 }

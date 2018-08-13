@@ -203,7 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 3
   moveSpeed: 5
-  meleeDamage: 1
+  meleeDamage: 2
   hp: 1
   shootInterval: 5
   bulletPrefab: {fileID: 0}

@@ -12,18 +12,21 @@ MonoBehaviour:
   m_Name: PickupTable
   m_EditorClassIdentifier: Assembly-CSharp::PickupTable
   pickupInfos:
-  - pickupPrefab: {fileID: 1504795301117672, guid: 76bffbd026b393041b4af6f922e94098,
+  - pickupPrefab: {fileID: 1386518809211010, guid: 3ced601bea9a83444862a7e09c3df921,
       type: 2}
     weight: 1
   - pickupPrefab: {fileID: 1504795301117672, guid: a5bf4b568485b8147ae8063d8592abcc,
       type: 2}
-    weight: 1
-  - pickupPrefab: {fileID: 1811713034693654, guid: ceb16eb7f8b00f941b527b0af9b2ed7b,
+    weight: 2
+  - pickupPrefab: {fileID: 1318962359607392, guid: 7a7d1905eb3fc19488b2f00b17ebee5d,
       type: 2}
-    weight: 1
+    weight: 2
   - pickupPrefab: {fileID: 1274683892462562, guid: beb17516921d9c84288c39cb84816c90,
       type: 2}
     weight: 1
   - pickupPrefab: {fileID: 1519791098045714, guid: 4cf22219d0950ac4681410126d0c38b3,
+      type: 2}
+    weight: 1
+  - pickupPrefab: {fileID: 1811713034693654, guid: ceb16eb7f8b00f941b527b0af9b2ed7b,
       type: 2}
     weight: 1

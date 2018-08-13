@@ -8,7 +8,6 @@ public class PlayerLevelsObject : ScriptableObject {
   public float[] playerSpeedLevels;
   public float[] bulletSpeedLevels;
   public float[] bulletShootIntervalLevels;
-  public float[] bulletSizeLevels;
-  public float[] bulletDamageLevels;
+  public int[] bulletCountLevels;
 
 }

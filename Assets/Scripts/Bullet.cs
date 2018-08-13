@@ -28,6 +28,11 @@ public class Bullet : MonoBehaviour {
     float bulletAngle = Mathf.Deg2Rad * transform.rotation.eulerAngles.z;
     Vector2 bulletDir = new Vector2(Mathf.Cos(bulletAngle), Mathf.Sin(bulletAngle));
     body.velocity = bulletDir * givenSpeed;
+
+    if (GetComponent<AudioSource>() != null)
+    {
+      GetComponent<AudioSource>().Play();
+    }
   }
 
   public virtual void HitTarget(GameObject target) {

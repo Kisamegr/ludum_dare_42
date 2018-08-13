@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
   public GameObject primaryBulletPrefab; 
   public Status currentStatus;
   public PlayerLevelsObject playerLevels;
+  public float bulletDamage = 1f;
 
   private float lastShootTime = 0;
   private float lastSpecialShootTime = 0;
@@ -27,8 +28,7 @@ public class Player : MonoBehaviour {
   private float shootInterval;
 
   private int currentBulletPowerLevel = 0;
-  private float bulletDamage;
-  private float bulletSize;
+  private int noBullets;
 
   Rigidbody2D body;
 
@@ -62,11 +62,10 @@ public class Player : MonoBehaviour {
     bulletSpawnOffset = transform.Find("BulletSpawnOffset");
     _GAME = GAME.Instance();
 
-    maxSpeed = playerLevels.playerSpeedLevels[0];
-    bulletDamage = playerLevels.bulletDamageLevels[0];
-    bulletSize = playerLevels.bulletSizeLevels[0];
+    maxSpeed = playerLevels.playerSpeedLevels[0]; 
     bulletSpeed = playerLevels.bulletSpeedLevels[0];
     shootInterval = playerLevels.bulletShootIntervalLevels[0];
+    noBullets = playerLevels.bulletCountLevels[0];
   }
 
 // Update is called once per frame
@@ -100,29 +99,48 @@ void Update() {
   }
 
   void PrimaryShoot() {
-    if (Input.GetAxis("Fire1") > 0 && Time.time - lastShootTime > shootInterval) {
-      Bullet bullet = CreateBullet(primaryBulletPrefab);
 
-      bullet.damageAmount = bulletDamage;
-      bullet.transform.localScale = new Vector3(bulletSize, bulletSize, 1);
+    if (Input.GetAxis("Fire1") > 0 && Time.time - lastShootTime > shootInterval) {
+
+      Vector2 perpendicularVector = Vector2.Perpendicular(bulletSpawnOffset.position - transform.position).normalized;
       
-      bullet.Shoot(bulletSpeed);
+      List<Bullet> bullets = new List<Bullet>(); 
+      for (int i = 0; i < noBullets; i++) {
+        float angleOffset = (i - (noBullets - 1) / 2) * 3f;
+        Bullet bullet = CreateBullet(primaryBulletPrefab, rotationOffset: angleOffset );
+        bullets.Add(bullet);
+      }
+      float singleBulletSpace = bullets[0].GetComponent<BoxCollider2D>().bounds.extents.y + 0.05f;
+      float bulletSpace = singleBulletSpace * noBullets;
+
+      for (int i = 0; i < noBullets; i++){ 
+        Bullet bullet = bullets[i];
+        Vector2 spawnLocation = bulletSpawnOffset.position + (-bulletSpace / 2 + singleBulletSpace / 2 + i * bulletSpace / noBullets) * (Vector3)perpendicularVector;
+        bullet.transform.position = spawnLocation;
+        bullet.damageAmount = bulletDamage; 
+        bullet.Shoot(bulletSpeed);
+      }
+
+       //GetComponent<AudioSource>().Play();
 
       lastShootTime = Time.time;
     }
 
   }
 
-  private Bullet CreateBullet(GameObject bulletPrefab) {
-    return Instantiate(bulletPrefab, position: bulletSpawnOffset.position, rotation: transform.rotation).GetComponent<Bullet>();
+  private Bullet CreateBullet(GameObject bulletPrefab, Vector3? spawnLocation = null, float rotationOffset = 0f) {
+    if(spawnLocation == null)
+    {
+      spawnLocation = bulletSpawnOffset.position;
+    }
+    return Instantiate(bulletPrefab, position: spawnLocation.Value, rotation: Quaternion.Euler(0,0,transform.rotation.eulerAngles.z + rotationOffset)).GetComponent<Bullet>();
   }
 
   public void IncreaseBulletPower()
   {
     currentBulletPowerLevel += 1;
-    currentBulletPowerLevel = Mathf.Min(currentBulletPowerLevel, playerLevels.bulletDamageLevels.Length - 1);
-    bulletDamage = playerLevels.bulletDamageLevels[currentBulletPowerLevel];
-    bulletSize = playerLevels.bulletSizeLevels[currentBulletPowerLevel]; 
+    currentBulletPowerLevel = Mathf.Min(currentBulletPowerLevel, playerLevels.bulletCountLevels.Length - 1);
+    noBullets = playerLevels.bulletCountLevels[currentBulletPowerLevel];
   }
 
   public void IncreaseBulletSpeed()
@@ -201,17 +219,17 @@ void Update() {
       currentAmmo);
   }
 
-  public void GetDamage(int damageAmount) {
+  public void GetDamage(float damageAmount) {
     if (!HasStatus(Status.Invunerable)) {
       _GAME.ChangeWallBorders(false, -damageAmount);
 
       var vcam = GameObject.Find("Follow Cam").GetComponent<Cinemachine.CinemachineVirtualCamera>();
       var noise = vcam.GetCinemachineComponent<Cinemachine.CinemachineBasicMultiChannelPerlin>();
 
-      noise.m_AmplitudeGain = 2;
-      noise.m_FrequencyGain = 4;
+      noise.m_AmplitudeGain = 3;
+      noise.m_FrequencyGain = 5;
 
-      Invoke("StopShaking", 0.4f);
+      Invoke("StopShaking", 0.5f);
     }
   }
 

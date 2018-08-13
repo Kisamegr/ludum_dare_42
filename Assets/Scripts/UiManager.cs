@@ -25,7 +25,7 @@ public class UiManager : MonoBehaviour
   private static UiManager _instance;
 
   public bool countdownPlaying = false;
-  private float countdownDuration = 0;
+  private float countdownLeft = 0;
 
   private Queue<Image> weaponUiImages;
 
@@ -38,6 +38,8 @@ public class UiManager : MonoBehaviour
   {
     _instance = this; 
   }
+
+  private int prevSec;
 
   // Use this for initialization
   void Start()
@@ -54,21 +56,24 @@ public class UiManager : MonoBehaviour
     float W = GAME.Instance().mapSize.x / 2 + 5;
     float H = GAME.Instance().mapSize.y / 2 + 5;
 
+
     int noGrids = 20;
 
     float w = 2 * W / noGrids;
     float h = 2 * H / noGrids;
 
+    var grid = new GameObject();
+
     for (int i = 0; i < noGrids; i++)
     {
-      GameObject lrGO = Instantiate(LinePrefab);
+      GameObject lrGO = Instantiate(LinePrefab, parent: grid.transform);
       LineRenderer lr = lrGO.GetComponent<LineRenderer>();
       lr.SetPositions(new Vector3[] { new Vector3(-W, -H + i * h, 0), new Vector3(W, -H + i * h, 0) });
     }
 
     for (int i = 0; i < noGrids; i++)
     {
-      GameObject lrGO = Instantiate(LinePrefab);
+      GameObject lrGO = Instantiate(LinePrefab, parent: grid.transform);
       LineRenderer lr = lrGO.GetComponent<LineRenderer>();
       lr.SetPositions(new Vector3[] { new Vector3(-W + i*w , -H, 0), new Vector3(-W + i * w, H, 0) });
     }
@@ -86,13 +91,30 @@ public class UiManager : MonoBehaviour
     UpdateTimeText();
 
     if(countdownPlaying) {
-      countdownText.text = Mathf.CeilToInt(countdownDuration).ToString();
-      countdownDuration -= Time.deltaTime;
+      countdownText.text = Mathf.CeilToInt(countdownLeft).ToString();
+      countdownLeft -= Time.deltaTime;
 
-      if(countdownDuration <= 0) {
+      //Play Second timer;
+      if(prevSec != Mathf.CeilToInt(countdownLeft))
+      {
+        if (Mathf.CeilToInt(countdownLeft) != 0)
+          transform.GetChild(0).GetComponents<AudioSource>()[1].Play();
+        
+        prevSec = Mathf.CeilToInt(countdownLeft);
+      }
+
+      if(countdownLeft <= 0) {
         countdownPlaying = false;
         countdownText.gameObject.SetActive(false);
         countdownAnimator.StopPlayback();
+        if(GAME.Instance().CurrentLevel == 0)
+        {
+          transform.GetChild(0).GetComponents<AudioSource>()[0].Play();
+        }
+        else
+        {
+          transform.GetChild(0).GetComponents<AudioSource>()[0].volume *= 3;
+        }
         GAME.Instance().LoadNextLevel();
       }
     }
@@ -100,7 +122,8 @@ public class UiManager : MonoBehaviour
   
 
   public void NextLevel(float duration) {
-    countdownDuration = duration;
+    transform.GetChild(0).GetComponents<AudioSource>()[0].volume /= 3;
+    countdownLeft = duration;
     countdownPlaying = true;
     countdownText.gameObject.SetActive(true);
   }
@@ -134,6 +157,12 @@ public class UiManager : MonoBehaviour
   public void GameOver()
   {
     //TODO: Fadeout
+    transform.GetChild(0).GetComponents<AudioSource>()[0].Stop();
+
+    //transform.GetChild(0).GetComponents<AudioSource>()[3].Play();
+    //transform.GetChild(0).GetComponents<AudioSource>()[0].clip = transform.GetChild(0).GetComponents<AudioSource>()[3].clip;
+    //transform.GetChild(0).GetComponents<AudioSource>()[0].Play();
+
     gameoverText.gameObject.SetActive(true);
   }
 

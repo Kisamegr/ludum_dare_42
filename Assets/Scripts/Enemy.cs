@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour {
 
   public EnemyType enemyType = EnemyType.Simple;
   public float moveSpeed = 5f;
-  public int meleeDamage = 1;
+  public float meleeDamage = 1;
   public float hp = 1;
   //Only if type 3
   public float shootInterval = 0.2f;
@@ -78,12 +78,10 @@ public class Enemy : MonoBehaviour {
         _rigidbody.velocity = moveDir * moveSpeed;
         break;
       case EnemyType.Wall:
-        Rect currentMapSize = GAME.Instance().CurrentMapSize();
-        //float area = Mathf.Pow(currentMapSize.width,2) + Mathf.Pow(currentMapSize.height, 2);
-        //float maxArea = Mathf.Pow(GAME.Instance().mapSize.x, 2) + Mathf.Pow(GAME.Instance().mapSize.x, 2);
-        //float speed = 1 - area / maxArea;
+        Rect currentMapSize = GAME.Instance().CurrentMapSize(); 
 
-        if (!currentMapSize.Contains(transform.position))
+        
+        if (!currentMapSize.Contains(GetComponent<SpriteRenderer>().bounds.min) || !currentMapSize.Contains(GetComponent<SpriteRenderer>().bounds.max))
         {
           Vector2 tp = transform.position;
           moveDir = (currentMapSize.center - tp).normalized;
@@ -92,7 +90,6 @@ public class Enemy : MonoBehaviour {
         else
         {
           _rigidbody.velocity = Vector2.zero;
-
         }
 
         //Nothing
@@ -127,6 +124,10 @@ public class Enemy : MonoBehaviour {
         switch (enemyType)
         {
           case EnemyType.Simple:
+            player.GetDamage(meleeDamage);
+            Die();
+            break;
+          case EnemyType.Star:
             player.GetDamage(meleeDamage);
             Die();
             break;
@@ -169,8 +170,7 @@ public class Enemy : MonoBehaviour {
     
   }
 
-  public void Die() {
-    GAME.Instance().EnemyDied();
+  public void Die() { 
     GAME.Instance().ChangeWallBorders(true, 5);
 
     float pickupSize = scorePickupPrefab.GetComponent<SpriteRenderer>().bounds.size.x;

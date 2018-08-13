@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletType: 0
-  bulletSpeed: 5
+  bulletSpeed: 10
   damageAmount: 5
   pushForce: 2
   targetTag: Enemy

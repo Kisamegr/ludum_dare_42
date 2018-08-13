@@ -4,10 +4,15 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "New Level", menuName = "Level")]
-public class LevelObject : ScriptableObject {
+public class LevelObject : ScriptableObject, ICloneable {
 
   public int id;
   public EnemySpawnEvent[] enemySpawnEvents;
+
+  public object Clone()
+  {
+    return this.MemberwiseClone();
+  }
 }
 
 [Serializable]

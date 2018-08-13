@@ -12,22 +12,15 @@ MonoBehaviour:
   m_Name: DefaultPlayerLevels
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLevelsObject
   playerSpeedLevels:
-  - 6
-  - 8
-  - 10
+  - 7
+  - 9
+  - 11
   bulletSpeedLevels:
-  - 8
-  - 11.5
-  - 15
+  - 9
+  - 12
+  - 16
   bulletShootIntervalLevels:
-  - 0.14
-  - 0.1
-  - 0.06
-  bulletSizeLevels:
-  - 0.4
-  - 0.6
-  - 0.7
-  bulletDamageLevels:
-  - 1
-  - 2
-  - 3
+  - 0.11
+  - 0.08
+  - 0.05
+  bulletCountLevels: 010000000200000003000000

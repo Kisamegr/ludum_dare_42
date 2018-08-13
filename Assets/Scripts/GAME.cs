@@ -15,7 +15,7 @@ public class GAME : MonoBehaviour {
   public float pickupDropChance = 0.3f;
   public PickupTable pickupTable;
 
-  public LevelObject[] levels;
+  public List<LevelObject> levels;
   private bool isGameover;
   private int score;
 
@@ -30,8 +30,7 @@ public class GAME : MonoBehaviour {
   private int currentWave = 0;
   private float lastLevelLoadTime;
 
-  private Queue<EnemySpawnEvent> remainingSpawnEvents;
-  private int remainingEnemies = 0;
+  private Queue<EnemySpawnEvent> remainingSpawnEvents; 
 
   bool startedNextWave = false;
 
@@ -97,9 +96,10 @@ public class GAME : MonoBehaviour {
 
       SetWallPositionsAndScale();
 
-      Enemy[] enemies = FindObjectsOfType<Enemy>();
+      Enemy[] enemies = GameObject.FindObjectsOfType<Enemy>();
       if ((Time.time - lastLevelLoadTime) > countdownTimer && enemies.Length == 0)
       {
+        ResetWalls();
         if (remainingSpawnEvents.Count == 0) {
           UiManager.Instance().NextLevel(countdownTimer);
           lastLevelLoadTime = Time.time;
@@ -132,29 +132,7 @@ public class GAME : MonoBehaviour {
 
   public void ChangeWallBorders(bool facingPlayer, float amount) {
     float angle = player.rotation.eulerAngles.z;
-    //if (!facingPlayer) {
-    //  angle -= 180;
-    //  if (angle < 0)
-    //    angle += 360;
-    //}
-
-    //if (angle >= 0 && angle < 90) {
-    //  mapBorders[(int) WallType.Top].BorderPosition += amount;
-    //  mapBorders[(int) WallType.Right].BorderPosition += amount;
-    //}
-    //else if (angle < 180) {
-    //  mapBorders[(int) WallType.Top].BorderPosition += amount;
-    //  mapBorders[(int) WallType.Left].BorderPosition += amount;
-    //}
-    //else if (angle < 270) {
-    //  mapBorders[(int) WallType.Left].BorderPosition += amount;
-    //  mapBorders[(int) WallType.Bottom].BorderPosition += amount;
-    //}
-    //else if (angle < 360) {
-    //  mapBorders[(int) WallType.Bottom].BorderPosition += amount;
-    //  mapBorders[(int) WallType.Right].BorderPosition += amount;
-    //}
-
+    
     if (!facingPlayer)
     {
       angle += 180;
@@ -267,13 +245,26 @@ public class GAME : MonoBehaviour {
     remainingSpawnEvents.Clear();
     currentWave = 0;
 
-    if (CurrentLevel < levels.Length) {
-      LevelObject level = levels[CurrentLevel];
-      foreach (EnemySpawnEvent spawnEvent in level.enemySpawnEvents)
-        remainingSpawnEvents.Enqueue(spawnEvent);
-
-      currentLevel++;
+    if(CurrentLevel == levels.Count)
+    {
+      int nextLvl = (levels.Count - 1) - 2; 
+      LevelObject newLevel = (LevelObject)levels[nextLvl].Clone();
+      Debug.Log(newLevel.name);
+      foreach (var spawnEvent in newLevel.enemySpawnEvents)
+      {
+        for(int i=0;i < spawnEvent.enemySpawns.Length; i++)
+        {
+          spawnEvent.enemySpawns[i].count += 2;
+        }
+      }
+      levels.Add(newLevel);
     }
+    
+    LevelObject level = levels[CurrentLevel];
+    foreach (EnemySpawnEvent spawnEvent in level.enemySpawnEvents)
+      remainingSpawnEvents.Enqueue(spawnEvent);
+
+    currentLevel++; 
   }
 
   void NextWaveSpawn() {
@@ -281,12 +272,22 @@ public class GAME : MonoBehaviour {
 
     Rect mapSize = CurrentMapSize();
 
+    float safeDist = 5;
+    Rect safeArea = new Rect(player.transform.position.x - safeDist, player.transform.position.y - safeDist, safeDist, safeDist);
+
     foreach (EnemySpawn spawn in spawnEvent.enemySpawns) {
       for (int i = 0; i<spawn.count; i++) {
         Vector3 position = new Vector3(
           Random.Range(mapSize.xMin, mapSize.xMax),
           Random.Range(mapSize.yMin, mapSize.yMax),
           0);
+        while(safeArea.Contains(position))
+        {
+          position = new Vector3(
+          Random.Range(mapSize.xMin, mapSize.xMax),
+          Random.Range(mapSize.yMin, mapSize.yMax),
+          0);
+        }
 
         Enemy enemy = Instantiate(spawn.enemy, position, Quaternion.identity).GetComponent<Enemy>();
         if (enemy.enemyType == EnemyType.Wall)
@@ -298,30 +299,17 @@ public class GAME : MonoBehaviour {
         if (Random.value < pickupDropChance) {
           enemy.pickupDropPrefab = pickupTable.ChoosePickup();
         }
-
-        remainingEnemies++;
+         
       }
     }
+    //Play "wave spawn" sound
+    transform.GetChild(0).GetComponents<AudioSource>()[2].Play();
 
     currentWave++;
     startedNextWave = false;
   }
-
-  public void EnemyDied() {
-    remainingEnemies--;
-  }
-
+   
   public Rect CurrentMapSize() {
-
-
-
-    //return new Rect(
-    //  -mapBorders[(int)WallType.Left].BorderPosition,
-    //  -mapBorders[(int)WallType.Bottom].BorderPosition,
-    //  mapBorders[(int)WallType.Left].BorderPosition + mapBorders[(int)WallType.Right].BorderPosition,
-    //  mapBorders[(int)WallType.Top].BorderPosition + mapBorders[(int)WallType.Bottom].BorderPosition
-    //  ); 
-
     return new Rect(
       mapBorders[(int)WallType.Left].Collider.bounds.max.x,
       mapBorders[(int)WallType.Bottom].Collider.bounds.max.y ,
