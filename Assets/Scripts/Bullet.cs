@@ -28,23 +28,31 @@ public class Bullet : MonoBehaviour {
     float bulletAngle = Mathf.Deg2Rad * transform.rotation.eulerAngles.z;
     Vector2 bulletDir = new Vector2(Mathf.Cos(bulletAngle), Mathf.Sin(bulletAngle));
     body.velocity = bulletDir * givenSpeed;
-
-    if (GetComponent<AudioSource>() != null)
-    {
-      GetComponent<AudioSource>().Play();
-    }
   }
 
   public virtual void HitTarget(GameObject target) {
     //if simple type1 
     if (target.CompareTag(targetTag)) {
       target.SendMessage("GetDamage", damageAmount);
+      PlayDestroySound();
       Destroy(gameObject);
     }
 
     if (target.CompareTag("Wall")) {
       UiManager.Instance().MakeExplosion(transform.position, 6, GetComponent<SpriteRenderer>().color, speedMultiplier: 0.5f);
+      PlayDestroySound();
       Destroy(gameObject);
+    }
+  }
+
+  protected void PlayDestroySound()
+  {
+    Transform audioChild = transform.Find("Audio");
+    if (audioChild != null)
+    {
+      audioChild.parent = null;
+      audioChild.GetComponent<AudioSource>().Play();
+      Destroy(audioChild.gameObject, 2f);
     }
   }
 

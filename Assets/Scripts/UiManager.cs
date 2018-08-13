@@ -62,7 +62,7 @@ public class UiManager : MonoBehaviour
     float w = 2 * W / noGrids;
     float h = 2 * H / noGrids;
 
-    var grid = new GameObject();
+    var grid = new GameObject("Grid");
 
     for (int i = 0; i < noGrids; i++)
     {
@@ -110,19 +110,14 @@ public class UiManager : MonoBehaviour
         if(GAME.Instance().CurrentLevel == 0)
         {
           transform.GetChild(0).GetComponents<AudioSource>()[0].Play();
-        }
-        else
-        {
-          transform.GetChild(0).GetComponents<AudioSource>()[0].volume *= 3;
-        }
+        } 
         GAME.Instance().LoadNextLevel();
       }
     }
   }
   
 
-  public void NextLevel(float duration) {
-    transform.GetChild(0).GetComponents<AudioSource>()[0].volume /= 3;
+  public void NextLevel(float duration) { 
     countdownLeft = duration;
     countdownPlaying = true;
     countdownText.gameObject.SetActive(true);
