@@ -11,5 +11,6 @@ public class PlayerLevelsObject {
   public float[] bulletSpeedLevels;
   public float[] bulletShootIntervalLevels;
   public int[] bulletCountLevels;
+  public bool[] bulletPenetrationLevels;
 
 }

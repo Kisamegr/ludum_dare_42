@@ -160,7 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 2
   moveSpeed: 0
-  meleeDamage: 1
+  meleeDamage: 2
   hp: 1
   shootInterval: 0.2
   bulletPrefab: {fileID: 1699185813431922, guid: 32b54711a44953f46bbcc5b90363997a,
@@ -172,6 +172,7 @@ MonoBehaviour:
   pickupDropPrefab: {fileID: 0}
   colorHitDamping: 0.2
   colorHitWhite: 0.7
+  wallPushAmount: 1
 --- !u!212 &212236562284231032
 SpriteRenderer:
   m_ObjectHideFlags: 1

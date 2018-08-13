@@ -23,4 +23,4 @@ MonoBehaviour:
     - enemy: {fileID: 1871962711690566, guid: 93cb98d68ef1eb244b8407871a6d7526, type: 2}
       count: 10
     - enemy: {fileID: 1151960933072088, guid: ac8a4c057cafc3240b9ce2d1b7e30ecc, type: 2}
-      count: 8
+      count: 10

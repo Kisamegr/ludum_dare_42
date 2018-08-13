@@ -281,7 +281,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -470,9 +470,9 @@ MonoBehaviour:
   wallsClosing: 1
   mapSize: {x: 25, y: 25}
   wallThickness: 10
-  wallSpeed: 3
+  wallSpeed: 2
   wallLerpSpeed: 3
-  pickupDropChance: 0.07
+  pickupDropChance: 0.1
   pickupTable:
     pickupInfos:
     - pickupPrefab: {fileID: 1386518809211010, guid: 3ced601bea9a83444862a7e09c3df921,
@@ -486,17 +486,19 @@ MonoBehaviour:
       weight: 2
     - pickupPrefab: {fileID: 1274683892462562, guid: beb17516921d9c84288c39cb84816c90,
         type: 2}
-      weight: 1
-    - pickupPrefab: {fileID: 1679440652384720, guid: f3512d54559c9764d9054c4470423f88,
+      weight: 2
+    - pickupPrefab: {fileID: 1519791098045714, guid: 4cf22219d0950ac4681410126d0c38b3,
         type: 2}
-      weight: 1
+      weight: 2
     - pickupPrefab: {fileID: 1811713034693654, guid: ceb16eb7f8b00f941b527b0af9b2ed7b,
         type: 2}
-      weight: 1
+      weight: 2
   levels:
   - {fileID: 11400000, guid: e7887166e68451148ba08046f659f17d, type: 2}
   - {fileID: 11400000, guid: d8fb6e4a2d87c2942b441dd6527df798, type: 2}
   - {fileID: 11400000, guid: 2d0f490e22240b84bb99e6b315e494cd, type: 2}
+  - {fileID: 11400000, guid: 86ec0119c23565b4981c1338bbd24de0, type: 2}
+  - {fileID: 11400000, guid: 2093e25c230f0b54db0a866fb74a21e4, type: 2}
 --- !u!114 &114406185604678418
 MonoBehaviour:
   m_ObjectHideFlags: 1

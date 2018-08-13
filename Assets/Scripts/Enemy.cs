@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour {
   private float currentHp;
   private SpriteRenderer spriteRenderer;
   private Color originalColor;
+  public float wallPushAmount = 5f;
 
   #region Type4 vars
   private float rotateSpeed = 2f;
@@ -154,8 +155,7 @@ public class Enemy : MonoBehaviour {
     if (collision.collider.CompareTag("Wall"))
     {
       Rect currentMapSize = GAME.Instance().CurrentMapSize();
-
-      transform.position = new Vector3(currentMapSize.x, currentMapSize.y, 0);
+      transform.position = new Vector3(currentMapSize.center.x, currentMapSize.center.y, 0);
     }
 
   }
@@ -183,7 +183,7 @@ public class Enemy : MonoBehaviour {
   }
 
   public void Die() { 
-    GAME.Instance().ChangeWallBorders(true, 5);
+    GAME.Instance().ChangeWallBorders(true, wallPushAmount);
 
     float pickupSize = scorePickupPrefab.GetComponent<SpriteRenderer>().bounds.size.x;
     for (int i = 0; i < pickupsDropCount; i++)

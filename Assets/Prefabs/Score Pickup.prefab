@@ -225,12 +225,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  lifetime: 10
-  score: 50
+  lifetime: 5
+  score: 10
   flickerDuration: 2
   magnetRadius: 2
   magneticForce: 400
-  scriptableObject: {fileID: 0}
+  weapon:
+    weaponName: 
+    type: 0
+    cooldown: 0
+    ammo: 0
+    bullet: {fileID: 0}
+    hasSecondActivation: 0
+    count: 1
 --- !u!212 &212290088202865636
 SpriteRenderer:
   m_ObjectHideFlags: 1

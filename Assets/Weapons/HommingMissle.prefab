@@ -54,7 +54,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1976492469154558}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.9919229, y: -1.3254066, z: -0.13018285}
+  m_LocalPosition: {x: -4.360004, y: 2.781205, z: -0.13018285}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children:
   - {fileID: 4936560641440328}
@@ -68,8 +68,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1226873373792164}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6367976, y: -1.7377291, z: 0}
-  m_LocalScale: {x: 0.7142857, y: 0.7142857, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4454248596498926}
   m_RootOrder: 0
@@ -326,6 +326,7 @@ MonoBehaviour:
   pushForce: 3
   targetTag: Enemy
   explosionColor: {r: 0, g: 0, b: 0, a: 0}
+  CanPenetrate: 0
   targetChooseDelay: 0.5
   searchRadius: 15
   rotationSpeed: 200

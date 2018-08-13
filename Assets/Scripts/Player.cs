@@ -29,6 +29,7 @@ public class Player : MonoBehaviour {
 
   private int currentBulletPowerLevel = 0;
   private int noBullets;
+  private bool bulletsPenetrate;
 
   Rigidbody2D body;
 
@@ -117,7 +118,8 @@ void Update() {
         Bullet bullet = bullets[i];
         Vector2 spawnLocation = bulletSpawnOffset.position + (-bulletSpace / 2 + singleBulletSpace / 2 + i * bulletSpace / noBullets) * (Vector3)perpendicularVector;
         bullet.transform.position = spawnLocation;
-        bullet.damageAmount = bulletDamage; 
+        bullet.damageAmount = bulletDamage;
+        bullet.CanPenetrate = bulletsPenetrate;
         bullet.Shoot(bulletSpeed);
       }
       lastShootTime = Time.time;
@@ -138,6 +140,7 @@ void Update() {
     currentBulletPowerLevel += 1;
     currentBulletPowerLevel = Mathf.Min(currentBulletPowerLevel, playerLevels.bulletCountLevels.Length - 1);
     noBullets = playerLevels.bulletCountLevels[currentBulletPowerLevel];
+    bulletsPenetrate = playerLevels.bulletPenetrationLevels[currentBulletPowerLevel];
   }
 
   public void IncreaseBulletSpeed()

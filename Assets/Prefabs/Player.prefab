@@ -188,7 +188,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b007e55dc3a9bc646a567eccdb016fff, type: 3}
+  m_audioClip: {fileID: 8300000, guid: afaa9269f7674ca4687c9bf43e796d35, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -395,18 +395,19 @@ MonoBehaviour:
   currentStatus: 0
   playerLevels:
     playerSpeedLevels:
-    - 7
+    - 6
+    - 8
     - 9
-    - 11
     bulletSpeedLevels:
     - 7
     - 9
     - 11
     bulletShootIntervalLevels:
-    - 0.11
+    - 0.12
+    - 0.1
     - 0.08
-    - 0.05
-    bulletCountLevels: 010000000200000003000000
+    bulletCountLevels: 010000000200000002000000
+    bulletPenetrationLevels: 000001
   bulletDamage: 1
 --- !u!212 &212083346646433294
 SpriteRenderer:
