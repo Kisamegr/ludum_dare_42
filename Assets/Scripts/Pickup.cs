@@ -137,9 +137,11 @@ public class Pickup: MonoBehaviour {
 
 }
 
-[CreateAssetMenu(fileName = "PickupTable", menuName = "Pickup Table")]
-public class PickupTable : ScriptableObject {
+//[CreateAssetMenu(fileName = "PickupTable", menuName = "Pickup Table")]
+[Serializable]
+public class PickupTable {
   public PickupInfo[] pickupInfos;
+
 
   public GameObject ChoosePickup() {
     float totalWeight = 0;
