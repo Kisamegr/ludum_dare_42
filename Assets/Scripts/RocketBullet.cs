@@ -29,7 +29,9 @@ public class RocketBullet : Bullet {
       }
     }
     UiManager.Instance().MakeExplosion(transform.position, 200, Color.yellow, speedMultiplier: 4f);
+    PlayDestroySound();
     Destroy(gameObject);
   }
+
 
 }

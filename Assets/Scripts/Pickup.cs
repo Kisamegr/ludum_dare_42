@@ -78,12 +78,8 @@ public class Pickup: MonoBehaviour {
   }
 
   private void Disappear()
-  {
-    if(GetComponent<AudioSource>() != null)
-    {
-      PlayPickupSound();
-    }
-
+  { 
+    PlayPickupSound();
     Destroy(gameObject);
   }
 
@@ -121,17 +117,12 @@ public class Pickup: MonoBehaviour {
 
   private void PlayPickupSound()
   {
-    GameObject g = new GameObject();
-    AudioSource otherAudioSource = g.AddComponent<AudioSource>();
-    AudioSource thisAudioSource = GetComponent<AudioSource>();
-
-    otherAudioSource.clip = thisAudioSource.clip;
-    otherAudioSource.volume = thisAudioSource.volume;
-    otherAudioSource.pitch = thisAudioSource.pitch;
-    otherAudioSource.Play();
-
-    Destroy(otherAudioSource, 2f);
-
+    Transform audioChild = transform.Find("Audio");
+    if (audioChild != null) {
+      audioChild.parent = null;
+      audioChild.GetComponent<AudioSource>().Play();
+      Destroy(audioChild.gameObject, 2f);
+    }
   }
 
 

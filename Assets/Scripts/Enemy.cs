@@ -141,15 +141,27 @@ public class Enemy : MonoBehaviour {
       }
     }
 
-    if (collision.collider.CompareTag("Wall"))
+    if (collision.collider.CompareTag("Wall") && enemyType == EnemyType.Star)
     {
       rotateSpeed *= -1f;
       _rigidbody.angularVelocity *= -1;
     }
   }
 
+  private void OnCollisionStay2D(Collision2D collision)
+  {
 
-    public void Shoot()
+    if (collision.collider.CompareTag("Wall"))
+    {
+      Rect currentMapSize = GAME.Instance().CurrentMapSize();
+
+      transform.position = new Vector3(currentMapSize.x, currentMapSize.y, 0);
+    }
+
+  }
+
+
+  public void Shoot()
   {
     if (Time.time - lastShootTime > shootInterval)
     {

@@ -251,6 +251,7 @@ void Update() {
 
       GetComponent<TrailRenderer>().enabled = true;
       transform.Find("Shield").gameObject.SetActive(true);
+      GetComponent<AudioSource>().Play();
     }
 
     if ((status & Status.AfterDashing) == Status.AfterDashing) {
