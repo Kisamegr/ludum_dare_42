@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb482e60a8272146acd57b682708592, type: 3}
+  m_Name: MissileSkill
+  m_EditorClassIdentifier: 
+  weaponName: Homming Missile
+  cooldown: 1
+  manaCost: 20
+  missileBullet: {fileID: 1976492469154558, guid: 0cecffcd9de3d20419025b0fd69a0534,
+    type: 2}
+  numberOfMissiles: 5

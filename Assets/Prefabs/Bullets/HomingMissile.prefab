@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 61281569479335978}
   - component: {fileID: 82728326196064670}
   m_Layer: 11
-  m_Name: HommingMissle
+  m_Name: HomingMissile
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

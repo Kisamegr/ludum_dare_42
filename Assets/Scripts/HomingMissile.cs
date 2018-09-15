@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HomingMissle : Bullet {
+public class HomingMissile : Bullet {
 
   public float targetChooseDelay;
   public float searchRadius;

@@ -537,7 +537,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 5.5
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -560,7 +560,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 212030457}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000023841858, y: 0.00000011920929, z: -10}
+  m_LocalPosition: {x: -0.00000047683716, y: 0.00000023841858, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1148,7 +1148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.49019608, g: 0.49019608, b: 0.49019608, a: 0.32156864}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.32156864}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1177,6 +1177,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114220671959502650, guid: 787a668d5e282d64aaf6dfe7091be18b,
+        type: 2}
+      propertyPath: levels.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4846761917288074, guid: 787a668d5e282d64aaf6dfe7091be18b, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1269,6 +1274,41 @@ Prefab:
       propertyPath: cursorTexture
       value: 
       objectReference: {fileID: 2800000, guid: f5d662dcffcd8f94e819222aa0b3cc04, type: 3}
+    - target: {fileID: 114220671959502650, guid: 787a668d5e282d64aaf6dfe7091be18b,
+        type: 2}
+      propertyPath: levels.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: e7887166e68451148ba08046f659f17d,
+        type: 2}
+    - target: {fileID: 114220671959502650, guid: 787a668d5e282d64aaf6dfe7091be18b,
+        type: 2}
+      propertyPath: levels.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: d8fb6e4a2d87c2942b441dd6527df798,
+        type: 2}
+    - target: {fileID: 114220671959502650, guid: 787a668d5e282d64aaf6dfe7091be18b,
+        type: 2}
+      propertyPath: levels.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2d0f490e22240b84bb99e6b315e494cd,
+        type: 2}
+    - target: {fileID: 114220671959502650, guid: 787a668d5e282d64aaf6dfe7091be18b,
+        type: 2}
+      propertyPath: levels.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 86ec0119c23565b4981c1338bbd24de0,
+        type: 2}
+    - target: {fileID: 114220671959502650, guid: 787a668d5e282d64aaf6dfe7091be18b,
+        type: 2}
+      propertyPath: levels.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2093e25c230f0b54db0a866fb74a21e4,
+        type: 2}
+    - target: {fileID: 114220671959502650, guid: 787a668d5e282d64aaf6dfe7091be18b,
+        type: 2}
+      propertyPath: wallsClosing
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 787a668d5e282d64aaf6dfe7091be18b, type: 2}
   m_IsPrefabAsset: 0
@@ -1310,7 +1350,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1356024118}
   m_Lens:
     FieldOfView: 40
-    OrthographicSize: 5.5
+    OrthographicSize: 7
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
@@ -1332,7 +1372,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 992973832}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000023841858, y: 0.00000011920929, z: -10}
+  m_LocalPosition: {x: -0.00000047683716, y: 0.00000023841858, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1913477491}
@@ -1402,7 +1442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.49019608, g: 0.49019608, b: 0.49019608, a: 0.14117648}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.14117648}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

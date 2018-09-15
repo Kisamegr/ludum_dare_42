@@ -201,6 +201,7 @@ MonoBehaviour:
   pushForce: 1
   targetTag: Player
   explosionColor: {r: 0, g: 0, b: 0, a: 0}
+  CanPenetrate: 0
 --- !u!212 &212612874533662692
 SpriteRenderer:
   m_ObjectHideFlags: 1

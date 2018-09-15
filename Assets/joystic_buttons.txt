@@ -1,0 +1,18 @@
+
+http://wiki.unity3d.com/index.php?title=Xbox360Controller
+
+D-pad up: joystick button 5
+D-pad down: joystick button 6
+D-pad left: joystick button 7
+D-pad right: joystick button 8
+start: joystick button 9
+back: joystick button 10
+left stick(click): joystick button 11
+right stick(click): joystick button 12
+left bumper: joystick button 13
+right bumper: joystick button 14
+center("x") button: joystick button 15
+A: joystick button 16
+B: joystick button 17
+X: joystick button 18
+Y: joystick button 19
