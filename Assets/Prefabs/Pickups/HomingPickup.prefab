@@ -141,14 +141,7 @@ MonoBehaviour:
   flickerDuration: 2
   magnetRadius: 2
   magneticForce: 400
-  weapon:
-    weaponName: Homing Missle
-    type: 2
-    cooldown: 1
-    ammo: 3
-    bullet: {fileID: 1976492469154558, guid: 0cecffcd9de3d20419025b0fd69a0534, type: 2}
-    hasSecondActivation: 0
-    count: 5
+  skillPrefab: {fileID: 11400000, guid: 30f283c37e356a248acaf829390c1b8a, type: 2}
 --- !u!114 &114200399551797704
 MonoBehaviour:
   m_ObjectHideFlags: 1

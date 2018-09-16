@@ -39,23 +39,12 @@ public class InputHandler : MonoBehaviour {
 
     private void HandleInputType()
     {
-
         bool joystickUsed = GetJoystickUsed();
-        if (joystickUsed)
-        {
-            Debug.Log("joystick used");
-        }
-
 
         bool mouseAndKeyboardUsed = false;
         if (!joystickUsed && Input.anyKeyDown || lastMousePos != (Vector2)Input.mousePosition)
             mouseAndKeyboardUsed = true;
         lastMousePos = Input.mousePosition;
-
-        if (mouseAndKeyboardUsed)
-        {
-            Debug.Log("MouseAndKeyboard used");
-        }
 
         if (GetInputType == InputType.MOUSE_KEYBOARD && joystickUsed)
             GetInputType = InputType.JOYSTICK;
@@ -64,7 +53,6 @@ public class InputHandler : MonoBehaviour {
             GetInputType = InputType.MOUSE_KEYBOARD;
 
         Cursor.visible = GetInputType == InputType.MOUSE_KEYBOARD;
-        //Debug.Log(GetInputType);
     }
 
 
@@ -79,7 +67,6 @@ public class InputHandler : MonoBehaviour {
                 break;
             }
         }
-
 
         if (Input.GetAxis("Left Stick X") != 0.0f ||
             Input.GetAxis("Left Stick Y") != 0.0f ||

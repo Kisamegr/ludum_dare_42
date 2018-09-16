@@ -12,7 +12,7 @@ public class RocketSkillObject : SkillObject
     private GameObject rocketBullet;
 
     [SerializeField]
-    private double explosionRadius = 1;
+    private float explosionRadius = 5;
 
     private RocketBullet rocketSpawn = null;
 
@@ -22,6 +22,7 @@ public class RocketSkillObject : SkillObject
         if(rocketSpawn == null)
         {
             rocketSpawn = (RocketBullet)player.CreateBullet(rocketBullet);
+            rocketSpawn.explosionRadius = explosionRadius;
             rocketSpawn.Shoot();
         }
         else

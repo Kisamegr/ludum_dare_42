@@ -291,14 +291,7 @@ MonoBehaviour:
   flickerDuration: 5
   magnetRadius: 2
   magneticForce: 400
-  weapon:
-    weaponName: Dash
-    type: 0
-    cooldown: 1
-    ammo: 5
-    bullet: {fileID: 1811713034693654}
-    hasSecondActivation: 0
-    count: 1
+  skillPrefab: {fileID: 11400000, guid: e573367c96eeb524986cb9e6707a0233, type: 2}
 --- !u!212 &212799514862274860
 SpriteRenderer:
   m_ObjectHideFlags: 1

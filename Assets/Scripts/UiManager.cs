@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class UiManager : MonoBehaviour
 {
@@ -20,9 +21,9 @@ public class UiManager : MonoBehaviour
 
     public GameObject LinePrefab;
 
-    public Transform weaponUiOverlay;
-    public GameObject weaponUiPrefab;
+    public Image skillImage;
     public Texture2D cursorTexture;
+    public Image manaBar;
 
 
 
@@ -31,8 +32,7 @@ public class UiManager : MonoBehaviour
 
     public bool countdownPlaying = false;
     private float countdownLeft = 0;
-
-    private Queue<Image> weaponUiImages;
+     
 
     private Vector3 originalScoreScale;
 
@@ -52,8 +52,7 @@ public class UiManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        game = GAME.Instance();
-        weaponUiImages = new Queue<Image>();
+        game = GAME.Instance(); 
         originalScoreScale = scoreText.transform.localScale;
 
         CreateGrid();
@@ -217,32 +216,16 @@ public class UiManager : MonoBehaviour
         Destroy(explosion, 3);
     }
 
-    public void SetSpecialWeapon(Sprite sprite, Color color, int ammo)
+    public void SetSecondarySkill(SkillObject secondarySkill)
     {
-        foreach (Image weaponUi in weaponUiImages)
-            Destroy(weaponUi.gameObject);
+        //manaBar.color = Color.yellow;
+        skillImage.sprite = secondarySkill.icon;
+        skillImage.color = secondarySkill.icon_color;
+        manaBar.color = secondarySkill.icon_color;
+    } 
 
-        weaponUiImages.Clear();
-
-        for (int i = 0; i < ammo; i++)
-        {
-            Image image = Instantiate(weaponUiPrefab, weaponUiOverlay).GetComponent<Image>();
-
-            image.sprite = sprite;
-            image.color = color;
-            weaponUiImages.Enqueue(image);
-        }
-    }
-
-    public void DecreaseAmmo()
+    public void UpdateMana(float percentage)
     {
-        Destroy(weaponUiImages.Dequeue());
+        manaBar.fillAmount = percentage;
     }
-
-
-    public void SetMana(float value)
-    {
-
-    }
-
 }

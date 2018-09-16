@@ -12,9 +12,14 @@ public abstract class SkillObject : ScriptableObject {
     [SerializeField]
     protected float manaCost;
 
+
     public virtual float Cooldown { get { return cooldown; } }
 
     public virtual float ManaCost { get { return manaCost; } }
+
+    public Sprite icon;
+
+    public Color icon_color;
 
     public abstract void Cast(Player player);
 

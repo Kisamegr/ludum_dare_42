@@ -126,7 +126,8 @@ AudioSource:
   m_GameObject: {fileID: 1971839582715180}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 243639594110606296, guid: b7aa5b62db1c2594c9bcebcac8737845,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 6fc0d7eeec0488941ab360dd9f572d1d, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.02
@@ -230,14 +231,7 @@ MonoBehaviour:
   flickerDuration: 2
   magnetRadius: 2
   magneticForce: 400
-  weapon:
-    weaponName: 
-    type: 0
-    cooldown: 0
-    ammo: 0
-    bullet: {fileID: 0}
-    hasSecondActivation: 0
-    count: 1
+  skillPrefab: {fileID: 0}
 --- !u!212 &212290088202865636
 SpriteRenderer:
   m_ObjectHideFlags: 1

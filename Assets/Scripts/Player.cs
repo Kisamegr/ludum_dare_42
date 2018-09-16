@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
 
-    public float invunerableDamage = 5f;
-    public float dashSpeed = 10;
-    public float dashTime = 0.5f;
-    public float dashDamping = 0.12f;
+    public float invunerableDamage = 5f; 
     public GameObject primaryBulletPrefab;
     public Status currentStatus;
     public PlayerLevelsObject playerLevels;
@@ -36,6 +35,7 @@ public class Player : MonoBehaviour
 
     private float dashDuration = 0;
     private float dashStartTime = 0;
+    public float dashDamping = 0.12f;
 
     private float afterDashDuration = 0;
     private float afterDashStartTime = 0;
@@ -43,15 +43,24 @@ public class Player : MonoBehaviour
     private float invunerableDuration = 0;
     private float invunerableStartTime = 0;
     private GAME _GAME;
-
-    private int currentAmmo = 100;
-
-    private Bullet currentSpecialBullet = null;
-    private SpecialWeaponObject specialWeapon;
+     
 
     private Vector2 dashDirection;
 
-    public float currentMana;
+    [SerializeField]
+    private float maxMana;
+    [SerializeField]
+    private float manaRegen;
+
+    private float currentMana;
+
+    [SerializeField]
+    private DashSkillObject dashSkill;
+
+
+
+    private SkillObject activeSecodarySkill;
+    private SkillObject secondarySkillPrefab;
 
     [Flags]
     public enum Status
@@ -61,6 +70,7 @@ public class Player : MonoBehaviour
         AfterDashing = 2,
         Invunerable = 4
     }
+
     // Use this for initialization
     void Start()
     {
@@ -71,7 +81,8 @@ public class Player : MonoBehaviour
         maxSpeed = playerLevels.playerSpeedLevels[0];
         bulletSpeed = playerLevels.bulletSpeedLevels[0];
         shootInterval = playerLevels.bulletShootIntervalLevels[0];
-        noBullets = playerLevels.bulletCountLevels[0];
+        noBullets = playerLevels.bulletCountLevels[0];  
+        currentMana = maxMana;
     }
 
     // Update is called once per frame
@@ -80,10 +91,14 @@ public class Player : MonoBehaviour
         Move();
         Rotate();
         PrimaryShoot();
-        SpecialShoot();
-        DashFullCheck();
+        SpecialShoot(); 
+        Dash();
 
         CheckExpiredStatus();
+
+
+        currentMana = Mathf.Min(maxMana, currentMana + manaRegen * Time.deltaTime);
+        UiManager.Instance().UpdateMana(1.0f * currentMana / maxMana);
     }
 
     void Move()
@@ -92,16 +107,14 @@ public class Player : MonoBehaviour
         velocity.x = Input.GetAxis("Horizontal") * maxSpeed;
         velocity.y = Input.GetAxis("Vertical") * maxSpeed;
 
-        if (HasStatus(Status.Dashing))
+        if (!HasStatus(Status.Dashing) && !HasStatus(Status.AfterDashing))
         {
-            body.velocity = dashDirection * dashSpeed;
+            body.velocity = velocity;
         }
         else if (HasStatus(Status.AfterDashing))
         {
             body.velocity = Vector2.Lerp(body.velocity, velocity, Time.deltaTime / dashDamping);
         }
-        else
-            body.velocity = velocity;
     }
 
     void Rotate()
@@ -204,115 +217,59 @@ public class Player : MonoBehaviour
         currentSpeedLevel = Mathf.Min(currentSpeedLevel, playerLevels.playerSpeedLevels.Length - 1);
         maxSpeed = playerLevels.playerSpeedLevels[currentSpeedLevel];
     }
+     
 
-
+     
     void SpecialShoot()
     {
-        if (specialWeapon != null)
+        if (activeSecodarySkill != null)
         {
-            if(Input.GetButtonDown("Secondary")) 
-            {
-                if (specialWeapon.hasSecondActivation && currentSpecialBullet != null)
-                {
-                    currentSpecialBullet.HitTarget(currentSpecialBullet.gameObject);
-                }
-                if (lastSpecialShootTime + specialWeapon.cooldown < Time.time)
-                {
-                    switch (specialWeapon.type)
-                    {
-                        case SpecialWeaponObject.WeaponType.Dash:
-                            SetStatus(Status.Dashing | Status.Invunerable, dashTime);
-                            dashDirection = transform.right;
-                            break;
-                        case SpecialWeaponObject.WeaponType.Rocket:
-                            RocketBullet rocket = (RocketBullet)CreateBullet(specialWeapon.bullet);
-                            rocket.Shoot();
-                            currentSpecialBullet = rocket;
-                            break;
-                        case SpecialWeaponObject.WeaponType.Homing:
-                            float maxAngle = 45;
-                            float angleSpacing = maxAngle / specialWeapon.count;
-                            float currentAngle = -maxAngle / 2;
-                            for (int i = 0; i < specialWeapon.count; i++)
-                            {
-                                HomingMissile missle = (HomingMissile)CreateBullet(specialWeapon.bullet);
-                                missle.ShootOffset(currentAngle);
-                                currentAngle += angleSpacing;
-                            }
-                            break;
-                    }
-
-                    //specialWeapon.ammo--;
-                    currentAmmo--;
-                    UiManager.Instance().DecreaseAmmo();
-
-                    lastSpecialShootTime = Time.time;
-
-
-                    if (currentAmmo == 0)
-                        specialWeapon = null;
-                }
-            }
-
-        }
-    }
-
-    void DashFullCheck()
-    {
-        if (Input.GetButtonDown("Dash"))
-        {
-            Dash();
-        }
-    }
-
-
-    void SpecialShoot2()
-    {
-        SkillObject skill = null;
-        if (specialWeapon != null)
-        {
-
-            if (Input.GetAxis("Fire2") > 0
-                && lastSpecialShootTime + skill.Cooldown < Time.time
-                && currentMana >= skill.ManaCost)
-            {
-                skill.Cast(this);
-
-                currentMana -= skill.ManaCost;
-                UiManager.Instance().DecreaseAmmo();
-
+            if (Input.GetButtonDown("Secondary")
+                && lastSpecialShootTime + activeSecodarySkill.Cooldown < Time.time
+                && currentMana >= activeSecodarySkill.ManaCost){
+                 
+                currentMana -= activeSecodarySkill.ManaCost;
+                activeSecodarySkill.Cast(this);
                 lastSpecialShootTime = Time.time;    
             }
         }
+    }
 
+
+    void Dash()
+    {
+        if (Input.GetButtonDown("Dash")
+            && lastSpecialShootTime + activeSecodarySkill.Cooldown < Time.time
+            && currentMana >= activeSecodarySkill.ManaCost)
+        {
+            currentMana -= dashSkill.ManaCost;
+            dashSkill.Cast(this);
+            lastSpecialShootTime = Time.time;
+        }
     }
 
 
 
 
 
-
-    public void Dash()
+    public void SetSecondarySkill(SkillObject skillPrefab)
     {
-        SetStatus(Status.Dashing | Status.Invunerable, dashTime);
-        //dashDirection = transform.right;
-        //dashDirection = body.velocity.normalized;
-        dashDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
-    }
-
-    public void SetSpecialWeapon(SpecialWeaponObject weapon)
-    {
-        specialWeapon = weapon;
-        currentSpecialBullet = null;
+        secondarySkillPrefab = skillPrefab;
+        activeSecodarySkill = Instantiate(skillPrefab);
         lastSpecialShootTime = 0;
-        currentAmmo = specialWeapon.ammo;
+        currentMana = maxMana;
 
-        SpriteRenderer bulletRenderer = weapon.bullet.GetComponent<SpriteRenderer>();
+        UiManager.Instance().SetSecondarySkill(secondarySkillPrefab);
+    }
 
-        UiManager.Instance().SetSpecialWeapon(
-          bulletRenderer.sprite,
-          bulletRenderer.color,
-          currentAmmo);
+    public void GetPushed(float pushAmount)
+    {
+
+    }
+
+    public void FillMana(float manaAmount)
+    {
+        currentMana = Mathf.Min(maxMana, currentMana + manaAmount);
     }
 
     public void GetDamage(float damageAmount)
@@ -341,11 +298,7 @@ public class Player : MonoBehaviour
     }
 
 
-
-    public void GetPushed(float force)
-    {
-
-    }
+     
 
     public void SetStatus(Status status, float timeAmount = 0)
     {
