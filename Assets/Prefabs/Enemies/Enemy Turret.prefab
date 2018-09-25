@@ -68,8 +68,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1871962711690566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.30212, y: 1.5251846, z: -0.13018285}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_Children:
   - {fileID: 4441890503556784}
   - {fileID: 4561089193247084}
@@ -155,17 +155,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1871962711690566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 303eb58bfa9f8b448959009051ec4e3b, type: 3}
+  m_Script: {fileID: 11500000, guid: 17cde6e492f765c4cba7afff7cf80ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 2
   moveSpeed: 0
   meleeDamage: 2
   hp: 1
-  shootInterval: 0.2
-  bulletPrefab: {fileID: 1699185813431922, guid: 32b54711a44953f46bbcc5b90363997a,
-    type: 2}
-  bulletSpawnOffset: {fileID: 0}
   scorePickupPrefab: {fileID: 4033669490232630, guid: 76bffbd026b393041b4af6f922e94098,
     type: 2}
   pickupsDropCount: 2
@@ -173,6 +168,10 @@ MonoBehaviour:
   colorHitDamping: 0.2
   colorHitWhite: 0.7
   wallPushAmount: 1
+  shootInterval: 0.2
+  bulletPrefab: {fileID: 1699185813431922, guid: 32b54711a44953f46bbcc5b90363997a,
+    type: 2}
+  bulletSpawnOffset: {fileID: 4561089193247084}
 --- !u!212 &212236562284231032
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -10,168 +10,81 @@ using UnityEngine;
 /// </summary>
 public enum EnemyType { Simple, Wall, Turret, Star, Type5, Type6 };
 
+public abstract class Enemy : MonoBehaviour {
 
-public class Enemy : MonoBehaviour {
 
-  public EnemyType enemyType = EnemyType.Simple;
+  [Header("Enemy Properties")]
   public float moveSpeed = 5f;
   public float meleeDamage = 1;
   public float hp = 1;
-  //Only if type 3
-  public float shootInterval = 0.2f;
-  public GameObject bulletPrefab;
-  public Transform bulletSpawnOffset;
-  public Transform scorePickupPrefab;
+  public float wallPushAmount = 5f;
   public int pickupsDropCount = 1;
-  public GameObject pickupDropPrefab;
+  public Transform scorePickupPrefab;
+ 
+  [Header("Misc.")]
   public float colorHitDamping = 0.2f;
   public float colorHitWhite = 0.7f;
 
-  private Player player;
-  private Rigidbody2D _rigidbody;
-  private float lastShootTime;
-  private float currentHp;
-  private SpriteRenderer spriteRenderer;
-  private Color originalColor;
-  public float wallPushAmount = 5f;
+  [HideInInspector]
+  public GameObject pickupDropPrefab;
 
-  #region Type4 vars
-  private float rotateSpeed = 2f;
-  private Vector3 pivotPoint;
-  #endregion
+  protected Player player;
+  protected Rigidbody2D _rigidbody;
+  protected float lastShootTime;
+  protected float currentHp;
+  protected SpriteRenderer spriteRenderer;
+  protected Color originalColor;
 
+  protected Vector2 lastMoveDir;
 
   // Use this for initialization
-  void Start() {
+  protected virtual void Start() {
     player = GameObject.Find("Player").GetComponent<Player>();
     spriteRenderer = GetComponent<SpriteRenderer>();
     originalColor = spriteRenderer.color;
     _rigidbody = GetComponent<Rigidbody2D>();
     lastShootTime = Time.time;
-    bulletSpawnOffset = transform.Find("BulletSpawnOffset");
     currentHp = hp;
-
-    if(enemyType == EnemyType.Star)
-    {
-      _rigidbody.angularVelocity = 700f;
-
-      if (Random.value < 0.5)
-      {
-        rotateSpeed *= -1;
-         _rigidbody.angularVelocity *= -1f;
-        
-      }
-      float distFromCenter = Random.value;
-      pivotPoint = distFromCenter * transform.position;
-      pivotPoint.z = transform.position.z;
-    }
   }
 
   // Update is called once per frame
-  void Update() {
+  protected virtual void Update() {
 
     spriteRenderer.color = Color.Lerp(spriteRenderer.color, originalColor, Time.deltaTime / colorHitDamping);
-    Vector2 moveDir = (player.transform.position - transform.position).normalized;
-
-    switch (enemyType)
-    {
-      case EnemyType.Simple:
-        _rigidbody.velocity = moveDir * moveSpeed;
-        break;
-      case EnemyType.Wall:
-        Rect currentMapSize = GAME.Instance().CurrentMapSize(); 
-
-        
-        if (!currentMapSize.Contains(GetComponent<SpriteRenderer>().bounds.min) || !currentMapSize.Contains(GetComponent<SpriteRenderer>().bounds.max))
-        {
-          Vector2 tp = transform.position;
-          moveDir = (currentMapSize.center - tp).normalized;
-          _rigidbody.velocity = moveDir * moveSpeed;
-        }
-        else
-        {
-          _rigidbody.velocity = Vector2.zero;
-        }
-
-        //Nothing
-        break;
-      case EnemyType.Turret:
-        //Extrapolate maybe to predict future movement (+ noise)
-        float angle = Vector2.SignedAngle(Vector2.right, moveDir);
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-        Shoot();
-        break;
-      case EnemyType.Star: 
-        transform.RotateAround(pivotPoint, new Vector3(0, 0, 1), rotateSpeed);
-        break;
-      case EnemyType.Type5:
-        _rigidbody.velocity = moveDir * moveSpeed;
-        break;
-
-    }
-
+    lastMoveDir = (player.transform.position - transform.position).normalized;
+      //case EnemyType.Type5:
+      //  _rigidbody.velocity = lastMoveDir * moveSpeed;
   }
 
-  public void OnCollisionEnter2D(Collision2D collision)
+  protected abstract void OnPlayerCollision();
+
+  protected virtual void OnCollisionEnter2D(Collision2D collision)
   {
     if (collision.collider.CompareTag(player.tag))
     {
-          player.GetPushed(meleeDamage);
+      player.GetPushed(meleeDamage);
 
       if(player.HasStatus(Player.Status.Invunerable)) {
         GetDamage(player.invunerableDamage);
       }
       else {
-        switch (enemyType)
-        {
-          case EnemyType.Simple:
-            player.GetDamage(meleeDamage);
-            Die();
-            break;
-          case EnemyType.Star:
-            player.GetDamage(meleeDamage);
-            Die();
-            break;
-          case EnemyType.Type5:
-            //TODO use pushAmount variable?
-            player.GetPushed(meleeDamage); 
-            break;
-          default:
-            break;
-        }
+        OnPlayerCollision();
+          //case EnemyType.Type5:
+          //  //TODO use pushAmount variable?
+          //  player.GetPushed(meleeDamage); 
       }
-    }
-
-    if (collision.collider.CompareTag("Wall") && enemyType == EnemyType.Star)
-    {
-      rotateSpeed *= -1f;
-      _rigidbody.angularVelocity *= -1;
     }
   }
 
   private void OnCollisionStay2D(Collision2D collision)
   {
-
     if (collision.collider.CompareTag("Wall"))
     {
       Rect currentMapSize = GAME.Instance().CurrentMapSize();
       transform.position = new Vector3(currentMapSize.center.x, currentMapSize.center.y, 0);
     }
-
   }
 
-
-  public void Shoot()
-  {
-    if (Time.time - lastShootTime > shootInterval)
-    {
-      GameObject bulletGO = Instantiate(bulletPrefab, position: bulletSpawnOffset.position, rotation: transform.rotation);
-      Bullet bullet = bulletGO.GetComponent<Bullet>();
-      bullet.Shoot();
-
-      lastShootTime = Time.time;
-    }
-  }
 
   public void GetDamage(float damageAmount) {
     currentHp -= damageAmount;
@@ -179,7 +92,6 @@ public class Enemy : MonoBehaviour {
       Die();
     else
       spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.white, colorHitWhite);
-    
   }
 
   public void Die() { 
@@ -201,6 +113,5 @@ public class Enemy : MonoBehaviour {
     Destroy(gameObject);
   }
 
-
-
+  public abstract EnemyType Type();
 }

@@ -307,7 +307,8 @@ public class GAME : MonoBehaviour
             {
                 for (int i = 0; i < spawnEvent.enemySpawns.Length; i++)
                 {
-                    if (spawnEvent.enemySpawns[i].enemy.GetComponent<Enemy>().enemyType == EnemyType.Wall)
+          
+                    if (spawnEvent.enemySpawns[i].enemy.GetComponent<Enemy>().Type() == EnemyType.Wall)
                     {
                         spawnEvent.enemySpawns[i].count += 1;
                     }
@@ -356,7 +357,7 @@ public class GAME : MonoBehaviour
                 }
 
                 Enemy enemy = Instantiate(spawn.enemy, position, Quaternion.identity).GetComponent<Enemy>();
-                if (enemy.enemyType == EnemyType.Wall)
+                if (enemy.Type() == EnemyType.Wall)
                 {
                     enemy.transform.rotation = Quaternion.Euler(0, 0, Random.value * 360);
                 }

@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568934386650114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.15, y: -6.75, z: -0.13018285}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -198,16 +198,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1568934386650114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 303eb58bfa9f8b448959009051ec4e3b, type: 3}
+  m_Script: {fileID: 11500000, guid: a3d786b4aac07f146a1211bc34d3fb0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 3
   moveSpeed: 5
   meleeDamage: 2
   hp: 1
-  shootInterval: 5
-  bulletPrefab: {fileID: 0}
-  bulletSpawnOffset: {fileID: 0}
   scorePickupPrefab: {fileID: 4033669490232630, guid: 76bffbd026b393041b4af6f922e94098,
     type: 2}
   pickupsDropCount: 1
