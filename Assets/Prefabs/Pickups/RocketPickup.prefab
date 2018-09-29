@@ -153,15 +153,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1519791098045714}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 772b8add22349004f81146d83235bbb0, type: 3}
+  m_Script: {fileID: 11500000, guid: 0aa894f7a1fa1864da8f3b532e6d0129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 5
   lifetime: 10
   score: 10
   flickerDuration: 5
   magnetRadius: 2
   magneticForce: 400
+  requiresButtonPress: 0
   skillPrefab: {fileID: 11400000, guid: 78e458688c6923144936e4fb46578e9b, type: 2}
 --- !u!114 &114557405866373568
 MonoBehaviour:

@@ -132,23 +132,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1386518809211010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 772b8add22349004f81146d83235bbb0, type: 3}
+  m_Script: {fileID: 11500000, guid: efa08df7b0ba0e04e97bc5746ff5fd48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
   lifetime: 10
   score: 50
   flickerDuration: 5
   magnetRadius: 2
   magneticForce: 400
-  weapon:
-    weaponName: 
-    type: 0
-    cooldown: 0
-    ammo: 0
-    bullet: {fileID: 0}
-    hasSecondActivation: 0
-    count: 1
+  requiresButtonPress: 0
 --- !u!114 &114065093312743776
 MonoBehaviour:
   m_ObjectHideFlags: 1

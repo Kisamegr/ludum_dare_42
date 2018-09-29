@@ -222,16 +222,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1504795301117672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 772b8add22349004f81146d83235bbb0, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bae10d964036ac44a6fba64ee0a395e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
   lifetime: 5
   score: 10
   flickerDuration: 2
   magnetRadius: 2
   magneticForce: 400
-  skillPrefab: {fileID: 0}
+  requiresButtonPress: 0
 --- !u!212 &212290088202865636
 SpriteRenderer:
   m_ObjectHideFlags: 1
