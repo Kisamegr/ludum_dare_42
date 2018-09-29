@@ -107,8 +107,10 @@ public abstract class Enemy : MonoBehaviour {
     }
     UiManager.Instance().MakeExplosion(transform.position, 30, spriteRenderer.color);
 
-    if (pickupDropPrefab != null)
-      Instantiate(pickupDropPrefab, transform.position, Quaternion.identity);
+    if (pickupDropPrefab != null) {
+      Pickup pickup = Instantiate(pickupDropPrefab, transform.position, Quaternion.identity).GetComponent<Pickup>();
+      pickup.player = player;
+    }
 
     Destroy(gameObject);
   }
